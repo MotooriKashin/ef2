@@ -6,6 +6,7 @@
             "command": "E:\\MinGW\\bin\\g++.exe",
             "args": [
                 "-g",
+                "-static",
                 // @link 臭咸鱼 {@see https://www.cnblogs.com/chouxianyu/p/11249810.html}
                 "-fexec-charset=GBK", // 处理mingw中文编码问题
                 "-finput-charset=UTF-8", // 处理mingw中文编码问题
