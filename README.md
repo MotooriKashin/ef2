@@ -24,7 +24,7 @@
 问：网页中怎么才会有`ef2`下载链接？  
 答：正常情况下是不会有的，所以得有用户脚本生成这种链接（比如[Bilibili 旧播放页](https://github.com/MotooriKashin/Bilibili-Old/)在设置中启用“ef2辅助IDM下载”选项）  
 
-下面给出`ef2`链接在也面中如何使用：    
+下面给出`ef2`链接在页面中如何使用：    
 众所周知，HTML的`a`标签是用于超链接跳转，如：
 ```
 <a href="http://www.bilibili.com">IDM</a>
@@ -74,7 +74,7 @@ idmhelper.exe -u http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-3
 ```
 LXUgaHR0cDovLzExMi40OC4xNjcuMy91cGdjeGNvZGUvNjQvOTgvMzA0NTA5ODY0LzMwNDUwOTg2NF9uYjItMS0zMDA4MC5tNHMgLWEgIkJpbGliaWxpIEZyZWVkb29vb29vbS9NYXJrSUkiIC1yIGh0dHBzOi8vd3d3LmJpbGliaWxpLmNvbSAtbyBEOlzkuIvovb1c6KeG6aKRIC1zIOafkOafkOinhumikS5tcDQ
 ```
-别往了还要加上`ef2://`协议头：
+别忘了还要加上`ef2://`协议头：
 ```
 ef2://LXUgaHR0cDovLzExMi40OC4xNjcuMy91cGdjeGNvZGUvNjQvOTgvMzA0NTA5ODY0LzMwNDUwOTg2NF9uYjItMS0zMDA4MC5tNHMgLWEgIkJpbGliaWxpIEZyZWVkb29vb29vbS9NYXJrSUkiIC1yIGh0dHBzOi8vd3d3LmJpbGliaWxpLmNvbSAtbyBEOlzkuIvovb1c6KeG6aKRIC1zIOafkOafkOinhumikS5tcDQ
 ```
