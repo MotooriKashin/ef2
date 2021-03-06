@@ -6,9 +6,10 @@
             "command": "E:\\MinGW\\bin\\g++.exe",
             "args": [
                 "-g",
-                "-static",
+                "-mwindows", // 生成非命令行程序，这样不会有窗口一闪而过
+                "-static", // 静态编译，脱离对 MinGW 动态库的依赖
                 // @link 臭咸鱼 {@see https://www.cnblogs.com/chouxianyu/p/11249810.html}
-                "-fexec-charset=GBK", // 处理mingw中文编码问题
+                "-fexec-charset=GBK", // 处理midngw中文编码问题
                 "-finput-charset=UTF-8", // 处理mingw中文编码问题
                 "${file}",
                 "-o",
