@@ -9,7 +9,7 @@
 绿色命令行程序，无需安装，只是要写入注册表关联
 1. 下载所有文件到任意目录（其实只需要`ef2.exe`、`IDMHelper.exe`、`setup.bat`和`uninstall.bat`四个文件在同一目录下，目录最好不要有空格或中文！）
 2. 运行`setup.bat`，为`ef2.exe`注册名为`ef2`的链接关联（操作注册表会弹出管理员权限申请，请允许！）
-3. 就在浏览器中点击<a href="ef2://LXUgaHR0cDovLzExMi40OC4xNjcuMy91cGdjeGNvZGUvNjQvOTgvMzA0NTA5ODY0LzMwNDUwOTg2NF9uYjItMS0zMDA4MC5tNHM/ZT1pZzhldXhaTTJyTmNOYmRsaG9Odk5DOEJxSkl6TmJmcVhCdkV1RU52TkM4YU5FVkV0RXZFOUlNdlhCdkUyRU52TkNJbU5FVkVJajBZMkpfYXVnODU5SUJfJnVpcGs9NSZuYnM9MSZkZWFkbGluZT0xNjE0NzQ0MzYzJmdlbj1wbGF5dXJsdjImb3M9YmNhY2hlJm9pPTMwODY4MTM0NjImdHJpZD0zODBkOGVkZWIzMWY0OTBkYTQyMTgxOTdkZmEzMzI0ZHUmcGxhdGZvcm09YW5kcm9pZF9pJnVwc2lnPTdmYTAyMDdjMTYwMDBmNzBiNTVhMjFmYTY5MThlMmIzJnVwYXJhbXM9ZSx1aXBrLG5icyxkZWFkbGluZSxnZW4sb3Msb2ksdHJpZCxwbGF0Zm9ybSZjZG5pZD02NzQzJm1pZD00OTgxMTg0NCZvcmRlcmlkPTAsMyZsb2dvPTgwMDAwMDAwIC1hICJCaWxpYmlsaSBGcmVlZG9vb29vb20vTWFya0lJIiAtciBodHRwczovL3d3dy5iaWxpYmlsaS5jb20" >此链接</a>，如果浏览器成功请求使用外部程序打开的对话框就注册完成了，否则请重试第2步。
+3. 复制下文中的完整`ef2`链接，在浏览器中“粘贴并转到”，如果弹出请求使用外部程序打开的对话框就注册完成了，否则请重试第2步。
 
 #### 卸载
 1. 运行`uninstall.bat`，移除名为`ef2`的链接的注册信息（操作注册表会弹出管理员权限申请，请允许！）  
