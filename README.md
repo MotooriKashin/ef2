@@ -1,6 +1,6 @@
 这是[IDM（Internet Download Manager）](http://www.internetdownloadmanager.com/) 辅助下载工具，用以配合用户脚本使用自定义的`ef2://`链接发送下载数据到IDM，主要用来解决用户脚本无法主动调用IDM且无法自定义`user-agent`、`referer`、“下载目录”、“文件名”等信息的困扰。  
 这里自定义了一种类似`http`的名为`ef2`的协议，通过Windows协议关联功能关联到`ef2.exe`，并借助IDM官方COM组件进一步将数据传递到IDM，从而实现了自定义下载数据的功能。  
-同时支持关联IDM官方的导出文件（.ef2），可以直接双击打开解析并发送给 IDM。
+同时支持关联IDM官方的导出文件（.ef2），可以直接双击打开解析并发送给 IDM。  
 **一切的前提是已安装[IDM（Internet Download Manager）](http://www.internetdownloadmanager.com/)下载工具**  
 
 ---
