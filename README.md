@@ -1,5 +1,6 @@
 这是[IDM（Internet Download Manager）](http://www.internetdownloadmanager.com/) 辅助下载工具，用以配合用户脚本使用自定义的`ef2://`链接发送下载数据到IDM，主要用来解决用户脚本无法主动调用IDM且无法自定义`user-agent`、`referer`、“下载目录”、“文件名”等信息的困扰。  
 这里自定义了一种类似`http`的名为`ef2`的协议，通过Windows协议关联功能关联到`ef2.exe`，并借助IDM官方COM组件进一步将数据传递到IDM，从而实现了自定义下载数据的功能。  
+同时支持关联IDM官方的导出文件（.ef2），可以直接双击打开解析并发送给 IDM。
 **一切的前提是已安装[IDM（Internet Download Manager）](http://www.internetdownloadmanager.com/)下载工具**  
 
 ---
@@ -19,10 +20,14 @@
 
 ---
 ### 如何使用
-**安装完成就等于结束了，以后只要网页中有`ef2`下载链接就可以直接左键点击调用IDM下载了！**  
+使用方式有二：
+   1. 双击 IDM导出文件（.ef2）将解析其中的下载链接发送给 IDM。
+      - 若`.ef2`文件中只有一条链接，将弹出 IDM 下载对话框。
+      - 若不止一条下载链接，将发送所有链接到 IDM 下载队列，需要手动到 IDM 里“开始队列”。
+   2. 点击浏览器中的`ef2`自定义协议链接，拉起 IDM 下载。
 
-问：网页中怎么才会有`ef2`下载链接？  
-答：正常情况下是不会有的，所以得有用户脚本生成这种链接（比如[Bilibili 旧播放页](https://github.com/MotooriKashin/Bilibili-Old/)在设置中启用“ef2辅助IDM下载”选项）  
+那网页中怎么才会有`ef2`下载链接？  
+正常情况下是不会有的，所以得有用户脚本生成这种链接（比如[Bilibili 旧播放页](https://github.com/MotooriKashin/Bilibili-Old/)在设置中启用“ef2辅助IDM下载”选项）  
 
 下面给出`ef2`链接在页面中如何使用：    
 众所周知，HTML的`a`标签是用于超链接跳转，如：
@@ -84,6 +89,7 @@ ef2://LXUgaHR0cDovLzExMi40OC4xNjcuMy91cGdjeGNvZGUvNjQvOTgvMzA0NTA5ODY0LzMwNDUwOT
 ```
 以上。  
 一般来说参数只需要`-u`也就是下载链接就够了，其他参数都是可选的。不过那样直接在浏览器中右键IDM下载就是了，本项目也就没有存在的必要了。  
+*不过你要要是直接在http链接前加上`ef2://`也不经过base64加密直接充当ef2链接没什么大问题就是了，只不过缺少referer、user-agent等数据IDM可能下载失败就是了*  
 但有时候或者说更多时候我们想传递给IDM的不仅是一条链接！
    - 我们必须设置referer：否则IDM下载会被服务器拦截-403
    - 我们必须设置user-agent：否则一样-403
@@ -99,6 +105,7 @@ ef2://LXUgaHR0cDovLzExMi40OC4xNjcuMy91cGdjeGNvZGUvNjQvOTgvMzA0NTA5ODY0LzMwNDUwOT
 千言万语
    - **我最想的是IDM官方提供从HTML页面配置下载数据的功能，而不是只会被动地捕获！**  
    - 为什么COM接口还是2003年的文档？
+   - 为什么 IDM 自己不支持双击代开`.ef2`文件！
 
 ---
 ### 源码相关

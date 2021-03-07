@@ -3,6 +3,7 @@
 #include <objbase.h>
 #include <tchar.h>
 #include <iostream>
+#include <fstream>
 #include "base64.h"
 #include <string>
 #include <string.h>
@@ -48,51 +49,154 @@ string Utf8ToGbk(const char *src_str)
         delete[] szGBK;
     return strTemp;
 }
-
-int main(int argc, char *argv[])
+// 拉起 IDM
+// 感谢 IDMHelper.exe https://github.com/unamer/IDMHelper
+void pushToIDM(string lpParameters)
 {
-    string str = "";
-    string para = "";
-    string fin = "";
-    for (int i = 0; i < argc; i++)
-    {
-        if (strstr(argv[i], "ef2://"))
-        {
-            str.append(argv[i]);
-        }
-    }
-
-    // 去除 ef2:// 头
-    str.erase(0, 6);
-    // 从浏览器打开不知道为什么末尾会多斜杠
-    if (str[str.length() - 1] == '/')
-        str.erase(str.end() - 1);
-    // base64 解码
-    Base64::Decode(str, &para);
-    // 处理编码问题（utf-8 -> gbk）
-    fin = Utf8ToGbk(para.c_str());
-
-    // 打印调试信息：str为原本的base64编码数据；fin为最终转换发送给 IDMHelper 的参数
-    // printf("[+] links: %s\n", str.c_str());
-    // MessageBox(NULL, fin.c_str(), NULL, MB_OK);
-    // 调用 IDMHelper
+    // 获取二进制文件目录
     char szCurPath[MAX_PATH];
     memset(szCurPath, 0, MAX_PATH);
     GetModuleFileName(NULL, szCurPath, MAX_PATH);
     (strrchr(szCurPath, '\\'))[0] = 0;
     strcat(szCurPath, "\\IDMHelper.exe");
+    // 拉起 IDM
     SHELLEXECUTEINFO SendUrlToIDM = {0};
     SendUrlToIDM.cbSize = sizeof(SHELLEXECUTEINFO);
     SendUrlToIDM.fMask = SEE_MASK_NOCLOSEPROCESS;
     SendUrlToIDM.hwnd = NULL;
     SendUrlToIDM.lpVerb = _T("open");
     SendUrlToIDM.lpFile = szCurPath;
-    SendUrlToIDM.lpParameters = fin.c_str();
+    SendUrlToIDM.lpParameters = lpParameters.c_str();
     SendUrlToIDM.lpDirectory = NULL;
     SendUrlToIDM.nShow = SW_HIDE;
     SendUrlToIDM.hInstApp = NULL;
-
     ShellExecuteEx(&SendUrlToIDM);
     WaitForSingleObject(SendUrlToIDM.hProcess, INFINITE);
+}
+// 处理ef2协议
+void ef2Protocol(string str)
+{
+    string para = "";
+    string fin = "";
+    // 去除 ef2:// 头
+    str.erase(0, 6);
+    // 从浏览器打开不知道为什么末尾会多斜杠
+    if (str[str.length() - 1] == '/')
+        str.erase(str.end() - 1);
+    // base64 解码
+    if (str.find("LXUg") != string::npos)
+    {
+        Base64::Decode(str, &para); // 包含`-u `的base64码视频有效ef2链接
+    }
+    else if (str.find("://") != string::npos)
+    {
+        para = "-u " + str; // 并非有效base64码但可能是未编码的链接尝试直接视为下载链接
+    }
+    // 处理编码问题（utf-8 -> gbk）
+    fin = Utf8ToGbk(para.c_str());
+    if (fin != "")
+    {
+        pushToIDM(fin);
+    }
+    else
+    {
+        MessageBox(NULL, _T("非法ef2链接！请查阅相关文档：https://github.com/MotooriKashin/ef2"), NULL, MB_OK);
+    }
+}
+// 处理.ef2文件
+void ef2File(string path)
+{
+    ifstream inFile;
+    inFile.open(path.c_str());
+    string str;
+    string para = "";
+    int one = 0;
+    if (inFile)
+    {
+        while (!inFile.eof())
+        {
+            getline(inFile, str);
+            if (str == "<")
+            {
+                one = one + 1; // 记录ef2文件中下载链接数目
+                if (para != "")
+                {
+                    // ef2文件中不止一条链接，以添加队列方式发送前一条链接给IDM（需要手动开始下载队列）
+                    para.append("-q");
+                    pushToIDM(para);
+                }
+                para = "";
+                getline(inFile, str);
+                while (str != ">" && !inFile.eof())
+                {
+                    if (str.find("referer") != string::npos)
+                    {
+                        para.append("-r ");
+                        para.append(str.substr(9));
+                        para.append(" ");
+                    }
+                    else if (str.find("User-Agent") != string::npos)
+                    {
+                        para.append("-a \"");
+                        para.append(str.substr(12));
+                        para.append("\" ");
+                    }
+                    else if (str.find("://") != string::npos)
+                    {
+                        para.append("-u ");
+                        para.append(str);
+                        para.append(" ");
+                    }
+                    getline(inFile, str);
+                }
+            }
+        }
+        if (one == 1)
+        {
+            // ef2文件中只有一条链接直接发送给IDM
+            pushToIDM(para);
+        }
+        else
+        {
+            // ef2文件中不止一条链接，以添加队列方式发送最后一条链接给IDM（需要手动开始下载队列）
+            para.append("-q");
+            pushToIDM(para);
+            MessageBox(NULL, _T("该ef2文件包含复数个下载链接，为避免弹出过多对话框，已全部添加IDM到下载队列，请自行到IDM里开始队列！"), _T("ef2解析"), MB_OK);
+        }
+        inFile.close();
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    string str = "";
+    string type = "";
+    for (int i = 0; i < argc; i++)
+    {
+        if (strstr(argv[i], "ef2://"))
+        {
+            type = "protocol";
+            str.append(argv[i]);
+        }
+        if (strstr(argv[i], ".ef2"))
+        {
+            type = "file";
+            str.append(argv[i]);
+        }
+    }
+    if (type == "protocol")
+    {
+        if (!str.empty())
+        {
+            ef2Protocol(str);
+        }
+    }
+    if (type == "file")
+    {
+        if (!str.empty())
+        {
+            ef2File(str);
+        }
+    }
     return 0;
 }
