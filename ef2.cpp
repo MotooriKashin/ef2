@@ -82,19 +82,21 @@ void ef2Protocol(string str)
     str.erase(0, 6);
     // 从浏览器打开不知道为什么末尾会多斜杠
     if (str[str.length() - 1] == '/')
+    {
         str.erase(str.end() - 1);
-    // base64 解码
-    if (str.find("LXUg") != string::npos)
-    {
-        Base64::Decode(str, &para); // 包含`-u `的base64码视频有效ef2链接
     }
-    else if (str.find("://") != string::npos)
+    if (str.find("://") != string::npos)
     {
-        para = "-u " + str; // 并非有效base64码但可能是未编码的链接尝试直接视为下载链接
+        // 带协议头可能直接传入的下载链接
+        para = "-u " + str;
+    }
+    else
+    {
+        Base64::Decode(str, &para); // base64 解码
     }
     // 处理编码问题（utf-8 -> gbk）
     fin = Utf8ToGbk(para.c_str());
-    if (fin != "")
+    if (fin.find("-u ") != string::npos)
     {
         pushToIDM(fin);
     }
