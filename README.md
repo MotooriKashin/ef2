@@ -8,7 +8,7 @@
 
 #### 安装
 绿色命令行程序，无需安装，只是要写入注册表关联
-1. 下载[所有文件](https://github.com/MotooriKashin/ef2/archive/master.zip)并解压到任意目录（目录最好不要有空格或中文！）
+1. 下载[所有文件](https://github.com/MotooriKashin/ef2/archive/master.zip)或[发行版](https://github.com/MotooriKashin/ef2/releases/download/v0.1/ef2.zip)并解压到任意目录（目录最好不要有空格或中文！）
 2. 运行`setup.bat`，为`ef2.exe`注册名为`ef2`的链接关联（操作注册表会弹出管理员权限申请，请允许！）
 3. 复制下文中的完整`ef2`链接，在浏览器中“粘贴并转到”，如果弹出请求使用外部程序打开的对话框就注册完成了，否则请重试第2步。
 
@@ -88,8 +88,7 @@ ef2://LXUgaHR0cDovLzExMi40OC4xNjcuMy91cGdjeGNvZGUvNjQvOTgvMzA0NTA5ODY0LzMwNDUwOT
 <a href="ef2://LXUgaHR0cDovLzExMi40OC4xNjcuMy91cGdjeGNvZGUvNjQvOTgvMzA0NTA5ODY0LzMwNDUwOTg2NF9uYjItMS0zMDA4MC5tNHMgLWEgIkJpbGliaWxpIEZyZWVkb29vb29vbS9NYXJrSUkiIC1yIGh0dHBzOi8vd3d3LmJpbGliaWxpLmNvbSAtbyBEOlzkuIvovb1c6KeG6aKRIC1zIOafkOafkOinhumikS5tcDQ">点击下载</a>
 ```
 以上。  
-一般来说参数只需要`-u`也就是下载链接就够了，其他参数都是可选的。不过那样直接在浏览器中右键IDM下载就是了，本项目也就没有存在的必要了。  
-*不过你要要是直接在http链接前加上`ef2://`也不经过base64加密直接充当ef2链接没什么大问题就是了，只不过缺少referer、user-agent等数据IDM可能下载失败就是了*  
+一般来说参数只需要`-u`也就是下载链接就够了，其他参数都是可选的。不过那样直接在浏览器中右键IDM下载就是了，本项目也就没有存在的必要了。   
 但有时候或者说更多时候我们想传递给IDM的不仅是一条链接！
    - 我们必须设置referer：否则IDM下载会被服务器拦截-403
    - 我们必须设置user-agent：否则一样-403
