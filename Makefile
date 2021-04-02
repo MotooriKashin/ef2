@@ -1,10 +1,10 @@
-ef2:cpp.o rc.o
-	g++ cpp.o rc.o -mwindows -static -O3 -DNDEBUG -o ef2
-cpp.o:ef2.cpp
-	g++ -c ef2.cpp -fexec-charset=GBK -finput-charset=UTF-8 -o cpp.o
+ef2:c.o rc.o
+	g++ c.o rc.o -mwindows -fexec-charset=GBK -finput-charset=UTF-8 -static -O3 -DNDEBUG -o ef2
+c.o:ef2.cpp
+	g++ -c ef2.cpp -mwindows -fexec-charset=GBK -finput-charset=UTF-8 -static -O3 -DNDEBUG -o c.o
 rc.o:resource.rc
 	windres resource.rc rc.o
 
 .PHONY : clean
 clean:
-	-rm ef2.exe cpp.o rc.o
+	-rm ef2.exe c.o rc.o
