@@ -1,121 +1,113 @@
-这是[IDM（Internet Download Manager）](http://www.internetdownloadmanager.com/) 辅助下载工具，用以配合用户脚本使用自定义的`ef2://`链接发送下载数据到IDM，主要用来解决用户脚本无法主动调用IDM且无法自定义`user-agent`、`referer`、“下载目录”、“文件名”等信息的困扰。  
-这里自定义了一种类似`http`的名为`ef2`的协议，通过Windows协议关联功能关联到`ef2.exe`，并借助IDM官方COM组件进一步将数据传递到IDM，从而实现了自定义下载数据的功能。  
-同时支持关联IDM官方的导出文件（.ef2），可以直接双击打开解析并发送给 IDM。  
-**一切的前提是已安装[IDM（Internet Download Manager）](http://www.internetdownloadmanager.com/)下载工具**  
+这是[Internet Download Manager (IDM)](http://www.internetdownloadmanager.com/)辅助工具，用以拓展调用IDM下载的方式。  
+支持解析IDM导出文件(.ef2)并自定义了名为`ef2`的调用协议，用以配合用户脚本(UserScript)主动配置并调用IDM进行下载。
+支持配置：
+   - 下载链接
+   - referer
+   - User-Agent
+   - cookies
+   - post data *如果该链接要求使用 POST 方式下载的话*
+   - username/password
+   - 下载目录 *使用Windows目录格式——注意反斜杠 如`D:\Download\IDM`*
+   - 文件名 *请一并提供文件拓展名 如 `1.mp4`*
 
----
+### 工具目的
+IDM的自带媒体嗅探、下载捕获等功能已经做得足够好，本工具旨在辅助用户脚本(UserScript)以更主动的方式拉起或传递下载数据给IDM，因为IDM本身不支持这些功能：
+   1. IDM自己捕获及导出文件导入都不支持配置下载目录和文件名。
+   2. IDM自己捕获下载链接时referer或User-Agent可能并不正确而且不能自定义导致下载-403。
+   3. IDM导出文件的导入步骤过于繁琐不支持双击打开。
+   4. 网页中主动调用IDM下载链接需要右键2步而不是左键一步到位。  
+
+
+### 安装/卸载
+1. 下载[所有文件](https://github.com/MotooriKashin/ef2/archive/master.zip)或[发行版](https://github.com/MotooriKashin/ef2/releases/download/v0.2/ef2.zip)并解压到任意目录
+2. 运行`ef2.exe`点击“安装”按钮即可，也可以通过运行`setup.bat`批处理文件来安装 *注意允许管理员权限！*
+3. 如需卸载，可再运行`ef2.exe`并点击“卸载”，或者运行`uninstall.bat` *同样需要管理员权限！*
+
 ### 如何使用
-
-#### 安装
-绿色命令行程序，无需安装，只是要写入注册表关联
-1. 下载[所有文件](https://github.com/MotooriKashin/ef2/archive/master.zip)或[发行版](https://github.com/MotooriKashin/ef2/releases/download/v0.1/ef2.zip)并解压到任意目录（目录最好不要有空格或中文！）
-2. 运行`setup.bat`，为`ef2.exe`注册名为`ef2`的链接关联（操作注册表会弹出管理员权限申请，请允许！）
-3. 复制下文中的完整`ef2`链接，在浏览器中“粘贴并转到”，如果弹出请求使用外部程序打开的对话框就注册完成了，否则请重试第2步。
-
-#### 卸载
-1. 运行`uninstall.bat`，移除名为`ef2`的链接的注册信息（操作注册表会弹出管理员权限申请，请允许！）  
-2. 删除整个目录即可，如果不放心可以再在浏览器中点击上面的链接试试，应该已经不会弹出打开外部程序的申请了，否则请重复第1步。
-
-*上述注册/注销操作会在同目录下留下`1.reg`文件，可自行查看，绝对没有写入任何有害信息！也应该没有影响windows稳定的操作。*
-
----
-### 如何使用
-使用方式有二：
-   1. 双击 IDM导出文件（.ef2）将解析其中的下载链接发送给 IDM。
-      - 若`.ef2`文件中只有一条链接，将弹出 IDM 下载对话框。
-      - 若不止一条下载链接，将发送所有链接到 IDM 下载队列，需要手动到 IDM 里“开始队列”。
-   2. 点击浏览器中的`ef2`自定义协议链接，拉起 IDM 下载。
-
-那网页中怎么才会有`ef2`下载链接？  
-正常情况下是不会有的，所以得有用户脚本生成这种链接（比如[Bilibili 旧播放页](https://github.com/MotooriKashin/Bilibili-Old/)在设置中启用“ef2辅助IDM下载”选项）  
-
-下面给出`ef2`链接在页面中如何使用：    
-众所周知，HTML的`a`标签是用于超链接跳转，如：
+用户脚本可自定按格式生成IDM导出文件(.ef2)让用户保存到本地，双击打开即可拉起IDM。
+也可将网页中提供的下载链接翻译成本工具自定义的ef2协议链接，左键单击即可拉起IDM。
+#### 1. 使用IDM导出文件(.ef2)——适用于批量下载
 ```
-<a href="http://www.bilibili.com">IDM</a>
-```
-其中`href`属性就是点击该链接是跳转去向。  
-只须`href`属性中的`http(s)`修改为`ef2`链接的形式，如：
-```
-<a href="ef2://aHR0cDovL3d3dy5iaWxpYmlsaS5jb20">IDM</a>
-```
-就可以了，怎么样？简单吧！  
-如果之前已成功注册了`ef2.exe`关联，那么此时点击这个`a`标签就可以直接将`ef2`链接传递出去了（可能浏览器会弹窗请求是否打开外部程序）。  
-如果这条`ef2`链接是有效的话，IDM就会立即弹出下载对话框。  
+<
+http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfqXBvEuENvNC8aNEVEtEvE9IMvXBvE2ENvNCImNEVEIj0Y2J_aug859IB_&uipk=5&nbs=1&deadline=1614744363&gen=playurlv2&os=bcache&oi=3086813462&trid=380d8edeb31f490da4218197dfa3324du&platform=android_i&upsig=7fa0207c16000f70b55a21fa6918e2b3&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,platform&cdnid=6743&mid=49811844&orderid=0,3&logo=80000000
+referer: https://www.bilibili.com/
+User-Agent: Bilibili Freedoooooom/MarkII
+>
 
-所以——怎么构造这样一条有效的`ef2`链接呢？  
-base64？那是最后一步，更重要的是数据内容。
-
----
-### 协议构成
-**`ef2`协议就是一串以`ef2://`开头的base64编码的字符串，字符串的内容就是要传递给[IDMHelper.exe](https://github.com/unamer/IDMHelper)的参数**  
-
-具体[IDMHelper.exe](https://github.com/unamer/IDMHelper)支持哪些参数可以去对应页面查看，或者看下面的翻译摘要：
-   - -u：下载链接（URL）
-   - -a：user-agent
-   - -c：cookies
-   - -d：POST数据（改用post方法请求）
-   - -r：referer
-   - -U：账户名称（如果服务器需要验证身份——一般都使用cookies替代了）
-   - -P：账户密钥（配合账户名称使用）
-   - -o：文件保存的本地目录（Windows的反斜杠形式，由于反斜杠也是 JavaScript 的转义符，js中请使用双反斜杠输入！）
-   - -s：自定义保存的文件名（包括拓展名）
-   - -f：禁用 IDM 对话框（JavaScript 中请赋值`true`或任何其他真值）
-   - -q：添加到下载队列而不下载（JavaScript 中请赋值`true`或任何其他真值）
-
-那么问题来了，对于下面这样一个视频：
-   - 链接：http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s
-   - 限制UA：Bilibili Freedoooooom/MarkII
-   - 限制referer：https://www.bilibili.com
-   - 保存目录：D:\下载\视频
-   - 文件名：某某视频.mp4
-
-对应的参数应该是——下面这样！
 ```
-idmhelper.exe -u http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s -a "Bilibili Freedoooooom/MarkII" -r https://www.bilibili.com -o D:\下载\视频 -s 某某视频.mp4
+   - IDM导出文件(.ef2)导出文件是IDM官方定义的下载文件格式，默认支持配置referer和User-Agent。
+   - 本工具支持直接在文件管理器中双击打开.ef2文件推送给IDM，免去IDM->任务->导入->从"IDM 导出文件"导入这些多余的步骤。
+      + 若.ef2文件中只有1条下载数据，就直接拉起DIM下载对话框。
+      + 若.ef2文件中不止一条下载数据，则将所有下载数据添加到IDM默认下载队列，需要到IDM中自行点击“开始队列”。
+   - 本工具拓展了.ef2文件的数据配置用以定制额外的需求，以上面那条下载数据为例，您可以在`User-Agent`和结束符`>`之间键入依行其他数据。
+      + 若要设置下载目录为`D:\Download\IDM`，请另起一行输入`filepath: D:\\Download\\IDM`。 **请确保使用双反斜杠**
+      + 若要设置文件名为`123.m4v`，请另起一行键入`filename: 123.m4v`。
+      + 其他还支持`cookies`、`postdata`、`username`和`password`，即上面列出的所有支持配置，依格式添加即可。  
+修改过的文件变成下面这样：
 ```
-现在我们去掉`IDMHelper.exe`及`-u`前面的空格。  
-再把剩下的字符串用base64编码一下就变成了：
-```
-LXUgaHR0cDovLzExMi40OC4xNjcuMy91cGdjeGNvZGUvNjQvOTgvMzA0NTA5ODY0LzMwNDUwOTg2NF9uYjItMS0zMDA4MC5tNHMgLWEgIkJpbGliaWxpIEZyZWVkb29vb29vbS9NYXJrSUkiIC1yIGh0dHBzOi8vd3d3LmJpbGliaWxpLmNvbSAtbyBEOlzkuIvovb1c6KeG6aKRIC1zIOafkOafkOinhumikS5tcDQ
-```
-别忘了还要加上`ef2://`协议头：
-```
-ef2://LXUgaHR0cDovLzExMi40OC4xNjcuMy91cGdjeGNvZGUvNjQvOTgvMzA0NTA5ODY0LzMwNDUwOTg2NF9uYjItMS0zMDA4MC5tNHMgLWEgIkJpbGliaWxpIEZyZWVkb29vb29vbS9NYXJrSUkiIC1yIGh0dHBzOi8vd3d3LmJpbGliaWxpLmNvbSAtbyBEOlzkuIvovb1c6KeG6aKRIC1zIOafkOafkOinhumikS5tcDQ
-```
-最后塞进`a`便签里：
-```
-<a href="ef2://LXUgaHR0cDovLzExMi40OC4xNjcuMy91cGdjeGNvZGUvNjQvOTgvMzA0NTA5ODY0LzMwNDUwOTg2NF9uYjItMS0zMDA4MC5tNHMgLWEgIkJpbGliaWxpIEZyZWVkb29vb29vbS9NYXJrSUkiIC1yIGh0dHBzOi8vd3d3LmJpbGliaWxpLmNvbSAtbyBEOlzkuIvovb1c6KeG6aKRIC1zIOafkOafkOinhumikS5tcDQ">点击下载</a>
-```
-以上。  
-一般来说参数只需要`-u`也就是下载链接就够了，其他参数都是可选的。不过那样直接在浏览器中右键IDM下载就是了，本项目也就没有存在的必要了。   
-但有时候或者说更多时候我们想传递给IDM的不仅是一条链接！
-   - 我们必须设置referer：否则IDM下载会被服务器拦截-403
-   - 我们必须设置user-agent：否则一样-403
+<
+http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfqXBvEuENvNC8aNEVEtEvE9IMvXBvE2ENvNCImNEVEIj0Y2J_aug859IB_&uipk=5&nbs=1&deadline=1614744363&gen=playurlv2&os=bcache&oi=3086813462&trid=380d8edeb31f490da4218197dfa3324du&platform=android_i&upsig=7fa0207c16000f70b55a21fa6918e2b3&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,platform&cdnid=6743&mid=49811844&orderid=0,3&logo=80000000
+referer: https://www.bilibili.com/
+User-Agent: Bilibili Freedoooooom/MarkII
+filepath: D:\\Download\\IDM
+filename: 123.m4v
+>
 
-以上两条就是B站视频下载链接直接复制到IDM里无法下载的原因。（右键下载因为会传递这两项所以没关系）  
-又或者视频格式不在IDM捕获列表内（说的就是你`.m4s`）：
-   - 我想左键点击而不是右键去调用IDM！
-  
-也有可能：
-   - 我还想自定义下载目录，而不是弹出对话框去选。
-   - 我还想重命名文件，而不是IDM自己识别的一串数字或者一串乱码！  
+```
+#### 2. 使用本工具自定义的`ef2`协议直接从浏览器中拉起IDM——适用响应左键单条链接
+```
+<a href="http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s" download="123.m4v">123.m4v</a>
+```
+ef2协议是本工具自定义的一种链接协议，基于一般超链接添加上面那些参数编码而成。  
+比如浏览器中可能存在的类似于上面这个`a`标签的下载链接，可以直接在href属性链接最前方添加上`ef2://`，就变成了`ef2://http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s`。  
+这样在浏览器中点击该链接就会直接拉起IDM开始下载该http链接。  
+但这样只是支持了在浏览器中直接左键拉起IDM，要配置其他数据还需要进一步编码 *为了方便表述这里换一条“短链接”`http://www.x.x/123.m4v`为例：*
+   1. 添加链接参数"-u"：即`-u http://www.x.x/123.m4v`  
+   2. 如果需要配置referer为`http://www.x.x/`：就变成了：`-u http://www.x.x/123.m4v -r http://www.x.x/`
+   3. 如果需要配置User-Agent为`Bilibili Freedoooooom/MarkII`：就变成了`-u http://www.x.x/123.m4v -r http://www.x.x/ -a "Bilibili Freedoooooom/MarkII"` *因为该字符串中存在空格所以得用双引号括起来*
+   4. 其他参数需要的话按同样的格式拼接起来即可，支持的全部参数如下： **所有可能存在空格的参数请都用双引号括起来！**
+       - `-u` —— 下载链接 如：`-u http://www.x.x/123.m4v`
+       - `-r` —— referer 如：`-r http://www.x.x/`
+       - `-a` —— User-Agent 如：`-a "Bilibili Freedoooooom/MarkII"`
+       - `-c` —— cookies 如：`-c xxxxxxx`
+       - `-d` —— post data 如：`-d yyyyyyy`
+       - `-U` —— username 如：`-U zzzzzzz`
+       - `-P` —— password 如：`-P wwwwwww`
+       - `-o` —— 下载目录 如：`-o D:\Download\IDM`
+       - `-s` —— 文件名 如：`-s 1.mp4`
+       - `-f` —— 禁用IDM下载对话框 *该参数只需添加`-f`即可*
+       - `-q` —— 添加到IDM队列而不是立即下载 *该参数只需添加`-q`即可*
+   5. 上面所有参数按需添加即可，不用全部配置，`-u`也就是下载链接本身除外 **如果链接都不存在那还下载什么？！**
+   6. **参数之间没有排序要求！** 下面展示把所有参数用上最后可能的样子
+```
+-u http://www.x.x/123.m4v -r http://www.x.x/ -a "Bilibili Freedoooooom/MarkII" -c xxxxxxx -d yyyyyyy -U zzzzzzz -P wwwwwww -o D:\Download\IDM -s 1.mp4 -f -q
+```
+*再次强调参数请按需添加！*
 
-千言万语
-   - **我最想的是IDM官方提供从HTML页面配置下载数据的功能，而不是只会被动地捕获！**  
-   - 为什么COM接口还是2003年的文档？
-   - 为什么 IDM 自己不支持双击代开`.ef2`文件！
+   7. 这样的最终链接包含“空格”“反斜杠”等**非法符号**，所以得用base64编码一下：
+```
+LXUgaHR0cDovL3d3dy54LngvMTIzLm00diAtciBodHRwOi8vd3d3LngueC8gLWEgIkJpbGliaWxpIEZyZWVkb29vb29vbS9NYXJrSUkiIC1jIHh4eHh4eHggLWQgeXl5eXl5eSAtVSB6enp6enp6IC1QIHd3d3d3d3cgLW8gRDpcRG93bmxvYWRcSURNIC1zIDEubXA0IC1mIC1x
+```
 
----
-### 源码相关
-初学c++，基于“搜索引擎”编程。代码粗劣，不看入目，如有建议，欢迎指点！  
-入口在`ef2.cpp`内，没有任何配置要求，使用vscode生成`ef2.exe`。      
-`base64.h`库及`IDMHelper.exe`及其他代码来源见“参考致谢”。  
-其实`IDMHelper.exe`功能本想整合进去并添加批量下载的，无奈[IDM官方给的工具](http://www.internetdownloadmanager.com/support/idm_api.html)不知道如何在vscode下使用……
+   8. 最后以`ef2`协议的样式返还到网页的`a`标签中即可  
+```
+<a href="ef2://LXUgaHR0cDovL3d3dy54LngvMTIzLm00diAtciBodHRwOi8vd3d3LngueC8gLWEgIkJpbGliaWxpIEZyZWVkb29vb29vbS9NYXJrSUkiIC1jIHh4eHh4eHggLWQgeXl5eXl5eSAtVSB6enp6enp6IC1QIHd3d3d3d3cgLW8gRDpcRG93bmxvYWRcSURNIC1zIDEubXA0IC1mIC1x">1.mp4</a>
+```
+   9. 然后用户在网页中点击该链接即可拉起IDM并传递所有数据
 
----
+### 编译相关
+环境：
+> Windows 8  
+> VSCode 1.55.0  
+> C/C++ Extension 1.3.0  
+> MinGW  8.1.0
+
+- tasks.json、Makefile等配置文件已写好，可以f5编译即可。
+- 如需调试，可将Makefile文件中`-static -O3 -DNDEBUG`3个参数去掉并添加`-g`参数，还要在`ef2.cpp`的入口函数`WinMain`中注释掉“管理员提权”那段代码，调试功能才能恢复正常。 **读写注册表相关将因权限问题失效！**
+- 注册表相关数据可参考`setup.bat`和`uninstall.bat`运行残留的`1.reg`文件，程序安装/卸载只是使用相关API进行同样条目的读写。
+
 ### 参考致谢
-- [unamer](https://github.com/unamer/IDMHelper)：调用IDM的核心二进制文件
+- [unamer](https://github.com/unamer/IDMHelper)：调用IDM的核心二进制文件，本工具其实是二次拉起该项目提供的二进制文件
 - [臭咸鱼](https://www.cnblogs.com/chouxianyu/p/11249810.html)：vscode编译c++中文乱码问题
 - [踏莎行hyx](https://blog.csdn.net/u012234115/article/details/83186386)：utf-8转gbk的c++代码
 - [tkislan](https://github.com/tkislan/base64)：base64的c++库  
