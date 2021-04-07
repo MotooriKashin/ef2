@@ -1,33 +1,29 @@
 #include "resource.h"
-#include "windows.h"
 
 IDI_MYICON ICON "IDI_MYICON.ico"
 
 1 24 "ef2.manifest"
 
-/*1 VERSIONINFO
-FILEVERSION 0,0,0,1
-PRODUCTVERSION 0,0,0,1
-FILEOS VOS__WINDOWS32
-FILETYPE VFT_APP
+1 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
 BEGIN
-    BLOCK "StringFileInfo"
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "080404E4"
     BEGIN
-        BLOCK "040904B0"
-        BEGIN
-            VALUE "FileDescription", "EF2"
-            VALUE "InternalName", "ef2.exe"
-            VALUE "OriginalFilename", "ef2.exe"
-            VALUE "CompanyName", "Kashin"
-            VALUE "LegalCopyright", "Licensed under the MIT License"
-            VALUE "ProductName", "EF2"
-            VALUE "FileVersion", "0.0.0.1"
-            VALUE "ProductVersion", "0.0.0.1"
-        END
+      VALUE "CompanyName", "Motoori Kashin"
+      VALUE "FileDescription", "IDM EF2½âÎö¹¤¾ß"
+      VALUE "FileVersion", "1.0"
+      VALUE "InternalName", "ef2.exe"
+      VALUE "LegalCopyright", "Licensed under the MIT License."
+      VALUE "OriginalFilename", "ef2.exe"
+      VALUE "ProductName", "IDM EF2 Helper"
+      VALUE "ProductVersion", "1.0"
     END
-
-    BLOCK "VarFileInfo"
-    BEGIN
-        VALUE "Translation", 0x0804 0x04B0  
-    END
-END*/
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x804, 1252
+  END
+END
