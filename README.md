@@ -26,7 +26,8 @@ IDM的自带媒体嗅探、下载捕获等功能已经做得足够好，本工�
 ### 如何使用
 用户脚本可自定按格式生成IDM导出文件(.ef2)让用户保存到本地，双击打开即可拉起IDM。
 也可将网页中提供的下载链接翻译成本工具自定义的ef2协议链接，左键单击即可拉起IDM。
-#### 1. 使用IDM导出文件(.ef2)——适用于批量下载
+#### 1. 使用IDM导出文件(.ef2)——适用于批量下载  
+这是一个只有一条下载数据的IDM导出文件(.ef2)以纯文本形式打开的样子：
 ```
 <
 http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfqXBvEuENvNC8aNEVEtEvE9IMvXBvE2ENvNCImNEVEIj0Y2J_aug859IB_&uipk=5&nbs=1&deadline=1614744363&gen=playurlv2&os=bcache&oi=3086813462&trid=380d8edeb31f490da4218197dfa3324du&platform=android_i&upsig=7fa0207c16000f70b55a21fa6918e2b3&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,platform&cdnid=6743&mid=49811844&orderid=0,3&logo=80000000
@@ -37,7 +38,7 @@ User-Agent: Bilibili Freedoooooom/MarkII
 ```
    - IDM导出文件(.ef2)导出文件是IDM官方定义的下载文件格式，默认支持配置referer和User-Agent。
    - 本工具支持直接在文件管理器中双击打开.ef2文件推送给IDM，免去IDM->任务->导入->从"IDM 导出文件"导入这些多余的步骤。
-      + 若.ef2文件中只有1条下载数据，就直接拉起DIM下载对话框。
+      + 若.ef2文件中只有1条下载数据，就直接拉起IDM下载对话框。
       + 若.ef2文件中不止一条下载数据，则将所有下载数据添加到IDM默认下载队列，需要到IDM中自行点击“开始队列”。
    - 本工具拓展了.ef2文件的数据配置用以定制额外的需求，以上面那条下载数据为例，您可以在`User-Agent`和结束符`>`之间键入依行其他数据。
       + 若要设置下载目录为`D:\Download\IDM`，请另起一行输入`filepath: D:\\Download\\IDM`。 **请确保使用双反斜杠**
@@ -54,7 +55,8 @@ filename: 123.m4v
 >
 
 ```
-#### 2. 使用本工具自定义的`ef2`协议直接从浏览器中拉起IDM——适用响应左键单条链接
+#### 2. 使用本工具自定义的`ef2`协议直接从浏览器中拉起IDM——适用响应左键单条链接  
+这是一个网页中以`a`标签形式存在的标准下载链接的样子：
 ```
 <a href="http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s" download="123.m4v">123.m4v</a>
 ```
@@ -95,6 +97,7 @@ LXUgaHR0cDovL3d3dy54LngvMTIzLm00diAtciBodHRwOi8vd3d3LngueC8gLWEgIkJpbGliaWxpIEZy
 ```
    9. 然后用户在网页中点击该链接即可拉起IDM并传递所有数据
 
+*[Bilibili Old](https://github.com/MotooriKashin/Bilibili-Old/)设置中开启ef2辅助有使用该自定义协议拉起IDM的示例。*
 ### 编译相关
 环境：
 > Windows 8  
