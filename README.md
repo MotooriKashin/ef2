@@ -111,7 +111,7 @@ LXUgaHR0cDovL3d3dy54LngvMTIzLm00diAtciBodHRwOi8vd3d3LngueC8gLWEgIkJpbGliaWxpIEZy
  * @returns {Promise<string>} ef2协议字符串
  */
 async ef2Encode(url, referer = location.origin, userAgent = navigator.userAgent, path = "", filename = "", f = false, q = false) {
-   let ef2 = import("/ef2.js"); // "/ef2.js"这里使用相对路径，实际情况请使用https绝对路径
+   let ef2 = (await import("/ef2.js")).default; // "/ef2.js"这里使用相对路径，实际情况请使用https绝对路径
    let result = await ef2.encode(
       {
          u: url,
