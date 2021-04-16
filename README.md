@@ -19,7 +19,7 @@ IDM的自带媒体嗅探、下载捕获等功能已经做得足够好，本工�
 
 
 ### 安装/卸载
-1. 下载[所有文件](https://github.com/MotooriKashin/ef2/archive/master.zip)或[发行版中的zip压缩包](https://github.com/MotooriKashin/ef2/releases/latest)并解压到任意目录
+1. 下载[所有文件](https://github.com/MotooriKashin/ef2/archive/master.zip)或[发行版中的ef2.zip压缩包](https://github.com/MotooriKashin/ef2/releases/latest)并解压到任意目录
 2. 运行`ef2.exe`点击“安装”按钮即可，也可以通过运行`setup.bat`批处理文件来安装 *注意允许管理员权限！*
 3. 如需卸载，可再运行`ef2.exe`并点击“卸载”，或者运行`uninstall.bat` *同样需要管理员权限！*
 
@@ -147,8 +147,8 @@ console.log(data);
 > C/C++ Extension 1.3.0  
 > MinGW  8.1.0
 
-- tasks.json、Makefile等配置文件已写好，可以f5编译即可。
-- 如需调试，可将Makefile文件中`-static -O3 -DNDEBUG`3个参数去掉并添加`-g`参数，还要在`ef2.cpp`的入口函数`WinMain`中注释掉“管理员提权”那段代码，调试功能才能恢复正常。 **读写注册表相关将因权限问题失效！**
+- tasks.json、Makefile等配置文件已写好，可以f5编译即可（MinGW需自行配置或者添加系统环境变量）。
+- 如需调试，可将Makefile文件中`-static -O3 -DNDEBUG -s`4个参数去掉并添加`-g`参数，还要在`ef2.cpp`的入口函数`WinMain`中注释掉“管理员提权”那段代码，调试功能才能恢复正常。 **读写注册表相关将因权限问题失效！**
 - 注册表相关数据可参考`setup.bat`和`uninstall.bat`运行残留的`1.reg`文件，程序安装/卸载只是使用相关API进行同样条目的读写。
 
 ### 参考致谢
