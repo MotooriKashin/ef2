@@ -19,7 +19,7 @@ IDM的自带媒体嗅探、下载捕获等功能已经做得足够好，本工�
 
 
 ### 安装/卸载
-1. 下载[所有文件](https://github.com/MotooriKashin/ef2/archive/master.zip)或[发行版](https://github.com/MotooriKashin/ef2/releases/download/v0.2/ef2.zip)并解压到任意目录
+1. 下载[所有文件](https://github.com/MotooriKashin/ef2/archive/master.zip)或[发行版中的zip压缩包](https://github.com/MotooriKashin/ef2/releases/latest)并解压到任意目录
 2. 运行`ef2.exe`点击“安装”按钮即可，也可以通过运行`setup.bat`批处理文件来安装 *注意允许管理员权限！*
 3. 如需卸载，可再运行`ef2.exe`并点击“卸载”，或者运行`uninstall.bat` *同样需要管理员权限！*
 
