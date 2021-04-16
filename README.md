@@ -97,6 +97,48 @@ LXUgaHR0cDovL3d3dy54LngvMTIzLm00diAtciBodHRwOi8vd3d3LngueC8gLWEgIkJpbGliaWxpIEZy
 ```
    9. 然后用户在网页中点击该链接即可拉起IDM并传递所有数据
 
+*`ef2.js`提供了一个es6标准的ef2协议编解码库，可以引入到项目中将下载链接转化为ef2协议（也可将核心代码直接整合进项目，代码以 MIT 许可开源）* 参看如下示例：  
+```
+/**
+ * ef2编码
+ * @param {string} url 下载链接
+ * @param {string} [referer] referer
+ * @param {string} [userAgent] userAgent
+ * @param {string} [path] 下载目录
+ * @param {string} [filename] 文件名，包含拓展名
+ * @param {Boolean} [f] 禁用IDM下载对话框，默认不禁用
+ * @param {Boolean} [q] 稍后下载，添加到下载队列而不立即开始，默认直接下载
+ * @returns {Promise<string>} ef2协议字符串
+ */
+async ef2Encode(url, referer = location.origin, userAgent = navigator.userAgent, path = "", filename = "", f = false, q = false) {
+   let ef2 = import("/ef2.js"); // "/ef2.js"这里使用相对路径，实际情况请使用https绝对路径
+   let result = await ef2.encode(
+      {
+         u: url,
+         r: referer,
+         a: userAgent,
+         o: path,
+         s: filename,
+         f: f,
+         q: q,
+      }
+   );
+   return result;
+}
+
+let data = await ef2Encode({
+   "http://www.example.com/example.mp4",
+   "http://www.example.com/",
+   "Bilibili Freedoooooom/MarkII",
+   "F:\\下载\\IDM", \\ 反斜杠是js转义符，以字符串输入时自身也要转义所以使用双斜杠
+   "example.mp4",
+   false, \\ 不取消下载对话框
+   true \\ 稍后下载：添加到队列而不立即下载
+});
+console.log(data);
+// 打印结果为：ef2://LXUgaHR0cDovL3d3dy5leGFtcGxlLmNvbS9leGFtcGxlLm1wNCAtYSAiQmlsaWJpbGkgRnJlZWRvb29vb29tL01hcmtJSSIgLXIgaHR0cDovL3d3dy5leGFtcGxlLmNvbS8gLW8gRjpc5LiL6L29XElETSAtcyBleGFtcGxlLm1wNCAtcQ==
+```
+
 *[Bilibili Old](https://github.com/MotooriKashin/Bilibili-Old/)设置中开启ef2辅助有使用该自定义协议拉起IDM的示例。*
 ### 编译相关
 环境：
@@ -115,3 +157,4 @@ LXUgaHR0cDovL3d3dy54LngvMTIzLm00diAtciBodHRwOi8vd3d3LngueC8gLWEgIkJpbGliaWxpIEZy
 - [踏莎行hyx](https://blog.csdn.net/u012234115/article/details/83186386)：utf-8转gbk的c++代码
 - [tkislan](https://github.com/tkislan/base64)：base64的c++库  
 - [IDM](http://www.internetdownloadmanager.com/support/idm_api.html)：IDM官方 COM 组件API
+- [js-base64](https://github.com/dankogai/js-base64)：js-base64库

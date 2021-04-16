@@ -154,6 +154,10 @@ void ef2Protocol(string lpLink)
     if (result.find("-u ") != string::npos)
     {
         pushToIDM(result);
+        if (result.find("-q") != string::npos)
+        {
+            MessageBox(NULL, TEXT("已添加到下载队列，需要开始下载时请到IDM点击开始队列！"), TEXT("静默下载"), MB_OK);
+        }
     }
     else
     {
