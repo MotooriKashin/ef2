@@ -1,22 +1,138 @@
 {
-    "tasks": [
-        {
-            "type": "shell",
-            "label": "ef2",
-            "command": "mingw32-make",
-            "args": [],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "Makefile"
-        }
-    ],
-    "version": "2.0.0"
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "rc",
+			"command": "rc.exe",
+			"args": [
+				"${fileDirname}\\resource.rc"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "编译RC资源。"
+		},
+		{
+			"type": "shell",
+			"label": "cl",
+			"command": "cl.exe",
+			"args": [
+				"/c",
+				"/GF",
+				"/O2",
+				"/EHsc",
+				"/D",
+				"NDEBUG",
+				"/D",
+				"_WINDOWS",
+				"/D",
+				"_UNICODE",
+				"/D",
+				"UNICODE",
+				"/Fe:",
+				"${fileDirname}\\${fileBasenameNoExtension}.obj",
+				"${file}",
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "编译代码文件而不链接。",
+			"dependsOn": [
+				"rc"
+			]
+		},
+		{
+			"type": "shell",
+			"label": "link",
+			"command": "link.exe",
+			"args": [
+				"${fileDirname}\\${fileBasenameNoExtension}.obj",
+				"${fileDirname}\\resource.res"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "链接生成二进制文件",
+			"dependsOn": [
+				"cl"
+			]
+		},
+		{
+			"type": "process",
+			"label": "clean",
+			"command": "powershell.exe",
+			"args": [
+				"ls",
+				"$folder",
+				"-r",
+				"|",
+				"%",
+				"{",
+				"if($_.name",
+				"-match",
+				"\"obj$\"",
+				"-or",
+				"$_.name",
+				"-match",
+				"\"pdb$\"",
+				"-or",
+				"$_.name",
+				"-match",
+				"\"exe.manifest$\"",
+				"-or",
+				"$_.name",
+				"-match",
+				"\"tlh$\"",
+				"-or",
+				"$_.name",
+				"-match",
+				"\"tli$\"",
+				"-or",
+				"$_.name",
+				"-match",
+				"\"res$\"",
+				"-and",
+				"$_.mode",
+				"-notmatch",
+				"\"d\"){",
+				"del",
+				"$_.FullName",
+				"}",
+				"}"
+			],
+			"detail": "清理中间文件残留，使用powershell",
+			"dependsOn": [
+				"link"
+			]
+		},
+		{
+			"label": "Build",
+			"dependsOn": [
+				"clean"
+			],
+			"detail": "编译入口，依次编译资源、代码，进行链接，并清理中间文件"
+		}
+	]
 }
