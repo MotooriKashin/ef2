@@ -1,4 +1,4 @@
 ## Ignore build results
-.exe
-.tlh
-.tli
+*.exe
+*.tlh
+*.tli
