@@ -314,8 +314,9 @@ BOOL CALLBACK RegQuery()
 
     nRes = RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("Software\\DownloadManager"), 0, KEY_READ, &hKey);
     if (nRes != ERROR_SUCCESS)
-    {
+    {   
         MessageBox(NULL, TEXT("您似乎未安装IDM！\r\n您必须先安装Internet Download Manager (IDM)才能使用此工具！"), NULL, MB_ICONWARNING);
+        PostQuitMessage(0);
     }
     nRes = RegOpenKeyEx(HKEY_CLASSES_ROOT, TEXT("ef2"), 0, KEY_READ, &hKey);
     if (nRes != ERROR_SUCCESS)
