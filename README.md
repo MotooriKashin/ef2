@@ -121,7 +121,13 @@ ef2.encode({
 
 - 由于IDM是Windows平台的下载工具，而官方又以COM组件形式暴露的编程接口，所以项目从1.0版本起正式弃用`MinGW`而使用`vs2015`自带的`msvc`作为编译器，以获得最佳效果并取消对于第三方二进制文件的依赖。  
 - 编译平台仍使用`VSCode`，通过配置`launch.json`和`tasks.json`以命令行形式调用`cl.exe`、`rc.exe`以及`link.exe`编译并链接，所以需要自行配置`msvc`进环境变量。  
-- 调用COM组件不可避免调用了`ATL`和`Windows SDK`，请一并添加进环境变量`include`。这些包括上面的环境变量对于vs的不同版本有不同的目录，所以无法给出一个统一的配置样例。  
+- 调用COM组件不可避免调用了`ATL`和`Windows SDK`，请一并添加进环境变量`include`。这些包括上面的环境变量对于vs的不同版本有不同的目录，所以无法给出一个统一的配置样例。其中`include`变量可以酌情添加进`VSCode`->`设置`->`C_Cpp › Default: Include Path`中。以下所举全为`vs2015`在`Windows8`上默认目录，其他Windows版本或VS版本请自行对照修改。  
+   + path：编译器`cl.exe`所在目录，`Windows Kits`资源编译器`rc.exe`所在目录。
+      - 例如：`C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64;C:\Program Files (x86)\Windows Kits\8.1\bin\x64`
+   + include：`VC++`库所在目录，`Windows Kits`中`um`、`shared`、`ucrt`以及`atlmfc`所在目录。
+      - 例如：`C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include;C:\Program Files (x86)\Windows Kits\8.1\Include\um;C:\Program Files (x86)\Windows Kits\8.1\Include\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10150.0\ucrt;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\atlmfc\include`
+   + lib：`VC++`lib库所在目录，`Windows Kits`中`ucrt`、`atlmfc`lib库所在目录，`Microsoft SDKs`lib库所在目录。
+      - 例如：`C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10150.0\ucrt\x64;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\lib\amd64;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib\x64;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\atlmfc\lib\amd6`
 - `ef2.cpp`是程序入口，打开该文件进行编译会在根目录生成`ef2.exe`，即是对外发布的二进制程序。  
 - 直接在`VSCode`中打开`ef2.cpp`文件可能报错`无法打开 源 文件 ".\IDManTypeInfo.tlh"`，这是因为缺少`tlb`库对应的解析文件，会在编译过程中自动生成。因为该文件包含设备本地环境数据不适合对外发布，所以将这些文件添加进了`.gitignore`，只需编译一次就会在本地生成，然后就不会报错了。  
 - 对外发布的`tasks.json`是release版本任务，如需调试请将`cl`任务的`args`参数替换成debug版本，在终端输入`cl.exe /?`有详细的配置说明。值得注意的是本项目编译和链接是分开的，因为要链接RC资源，所以请务必保留`/c`参数以禁用自动链接。  
