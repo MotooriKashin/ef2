@@ -127,7 +127,7 @@ ef2.encode({
    + include：`VC++`库所在目录，`Windows Kits`中`um`、`shared`、`ucrt`以及`atlmfc`所在目录。
       - 例如：`C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include;C:\Program Files (x86)\Windows Kits\8.1\Include\um;C:\Program Files (x86)\Windows Kits\8.1\Include\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10150.0\ucrt;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\atlmfc\include`
    + lib：`VC++`lib库所在目录，`Windows Kits`中`ucrt`、`atlmfc`lib库所在目录，`Microsoft SDKs`lib库所在目录。
-      - 例如：`C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10150.0\ucrt\x64;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\lib\amd64;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib\x64;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\atlmfc\lib\amd6`  
+      - 例如：`C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10150.0\ucrt\x64;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\lib\amd64;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib\x64;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\atlmfc\lib\amd64`  
 - 配置环境变量后可能出现编译调试正常但`VSCode`的C/C++拓展语法检查提示无法找不到某些源文件问题。请在`c_cpp_properties.json`（位于.vscode目录下，本人使用全局设定没有用该文件，如需要请自行创建——在VSCode打开cpp文件时点击右下角【win32】即可快速创建）中指定编译器为对应的`MSVC`并添加`include`。或者直接在`VSCode`的`settings.json`中添加如下项目：
    + `C_Cpp.default.intelliSenseMode`：`windows-msvc-x64`，即`MSVC`的64位桌面程序
    + `C_Cpp.default.compilerPath`：这里请精确到编译器`cl.exe`的绝对路径，如：`C:\\MSVC\\14.29.30130\\bin\\Hostx64\\x64\\cl.exe`
