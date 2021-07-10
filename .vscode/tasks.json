@@ -6,7 +6,7 @@
 			"label": "rc",
 			"command": "rc.exe",
 			"args": [
-				"${fileDirname}\\resource.rc"
+				"${workspaceFolder}\\resource.rc"
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
@@ -38,8 +38,8 @@
 				"/D",
 				"UNICODE",
 				"/Fe:",
-				"${fileDirname}\\${fileBasenameNoExtension}.obj",
-				"${file}",
+				"${workspaceFolder}\\ef2.obj",
+				"${workspaceFolder}\\ef2.cpp"
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
@@ -61,8 +61,8 @@
 			"label": "link",
 			"command": "link.exe",
 			"args": [
-				"${fileDirname}\\${fileBasenameNoExtension}.obj",
-				"${fileDirname}\\resource.res"
+				"${workspaceFolder}\\ef2.obj",
+				"${workspaceFolder}\\resource.res"
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"
