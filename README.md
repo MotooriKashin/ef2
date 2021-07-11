@@ -1,115 +1,218 @@
-[Internet Download Manager (IDM)](http://www.internetdownloadmanager.com/)下载辅助工具：支持解析IDM导出文件(.ef2)，支持使用自定义协议从浏览器直接拉起IDM。  
-- 使IDM导出文件(.ef2)支持双击打开。
-- 拓展IDM导出文件(.ef2)配置内容，支持重命名文件、保存目录等。
-- 支持使用自定义协议(ef2://)直接从浏览器拉起IDM并配置Referer、User-Agent、Cookies、保存目录、重命名文件等。
+[Internet Download Manager (IDM)](http://www.internetdownloadmanager.com/)下载辅助工具：
+   1. 支持在Windows资源管理器双击打开IDM导出文件(拓展名`.ef2`)
+   2. 支持在使用自定义协议在浏览器中拉起IDM(协议头为`ef2://`)
+
+拓展了IDM能配置的内容，允许自定义`referer`、`User-Agent`、`保存的文件名`及`保存目录`等数据
 
 ---
 ### 安装/卸载
-1. 下载[ef2.exe](https://github.com/MotooriKashin/ef2/releases/latest)到任意目录。 *作为安装目录*
-2. 运行`ef2.exe`点击“安装”。 *注意允许管理员权限！*
-3. 如需卸载，再次运行`ef2.exe`并点击“卸载”。 *同样需要管理员权限！*
-4. 如果移动了`ef2.exe`，需要重新“卸载”再“安装”。
+本工具为绿色软件，作为与IDM通讯的载体，您只需要下载[ef2.exe](https://github.com/MotooriKashin/ef2/releases/latest)程序本体后运行并点击“安装”按钮即可。  
+之后`ef2.exe`便成为了拉起IDM的“桥梁”一样的东西，在您需要主动拉起IDM时发挥作用。  
+如需卸载，请再次运行`ef2.exe`并点击“卸载”按钮，最后删除`ef2.exe`文件即可，保证干净无残留。
 
-*项目中的`setup.bat`和`uninstall.bat`批处理文件如果放在`ef2.exe`同目录中也可以代理安装/卸载操作。*  
-*`ef2.exe`文件请尽量放在一个单独的目录，不要放在桌面，因为“安装”后除非要卸载不然你基本不需要主动用到它。*  
-成功“安装”后，就可以直接在Windows资源管理器里双击打开任意IDM导出文件(.ef2)，同时在浏览器中左键点击自定义的(ef2://)协议链接也能直接拉起IDM了。  
-配合用户脚本(UserScript)，您可以将下载链接导出为ef2文件来批量下载，或者翻译为ef2协议来直接拉起IDM。  
-当然IDM本身就支持捕获和右键拉起，本工具真正目的在于自定义URL之外的数据。
+安装完成后，您可以有两种方式主动拉起IDM
+   1. 在Windows资源管理器双击IDM导出文件(拓展名`.ef2`)
+      - 这种导出文件是IDM本身所定义的，一般来自在IDM软件中“任务” -> “导出” -> “导出为"IDM 导出文件"”的操作
+      - 本质上是一个纯文本文档，所以我们可以通过记事本等工具自行生成，一些油猴脚本也正是通过这种文件保存批量下载数据到本地然后交给IDM
+      - 本工具关联了此类文件，让您双击打开即可以拉起IDM下载，免去“任务” -> “导入” -> “从"IDM 导出文件"导入”的繁琐操作
+      - 该文件原本只支持三项：URL、referer和User-Agent，本工具拓展了其支持的内容，详见后文.ef2文件拓展说明
+   2. 在浏览器中点击`ef2`协议的链接或将`.ef2`协议的链接粘贴进浏览器的地址栏并回车
+      - `ef2`协议是一种不存在的协议，是本工具自定义的一种协议，基本等同于https等协议，只不过是以`ef2://`开头
+      - 如果您不需要配置其他内容，那么把下载链接中的`https://`等直接替换为`ef2://`用来拉起IDM是可行的
+      - 如果您需要配置URL之外的内容，那么请参看后文自定义ef2协议的说明
 
 ---
-### 如何使用
-#### 使用IDM导出文件(.ef2)——适用于批量下载  
-这是一个只有一条下载数据的IDM导出文件(.ef2)以纯文本形式打开的样子：
-```
-<
-http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfqXBvEuENvNC8aNEVEtEvE9IMvXBvE2ENvNCImNEVEIj0Y2J_aug859IB_&uipk=5&nbs=1&deadline=1614744363&gen=playurlv2&os=bcache&oi=3086813462&trid=380d8edeb31f490da4218197dfa3324du&platform=android_i&upsig=7fa0207c16000f70b55a21fa6918e2b3&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,platform&cdnid=6743&mid=49811844&orderid=0,3&logo=80000000
-referer: https://www.bilibili.com/
-User-Agent: Bilibili Freedoooooom/MarkII
->
-```
-该文件可由IDM导出而来，本质上是一个纯文本文件(类似于.txt)，所以完全也可以按格式自己生成并保存为.ef2文件。
-我们来分析一下该文件格式：
-   1. 首先一对尖括号定义一条下载数据，所以一个.ef2文件可包括复数条下载数据。  
-   2. 尖括号内部第一行是下载链接URL。
-   3. 再往下是下载该URL的所需配置，格式为`名称: 内容`。这些数据可以不存在，它们可能用途是发送给服务器鉴别用户是否有权下载该URL。
-      - referer 代表下载链接来源，一般为网站顶级域名，服务器可能据此拒绝来自其他站点的下载请求（即禁止外链）。
-      - User-Agent 是下载工具识别码，服务器可能据此限制只允许特定客户端下载（禁止第三方下载工具）。
-   4. IDM能识别的内容最多只有上面两种，这意味着我们通过编辑ef2文件能自定义也就是这些。但本工具通过调用IDM编程接口实现了自定义更多：
-      - cookies 即浏览器识别用户身份的数据，服务器可能据此限制登录或者会员才能下载。
-      - postdata 如果服务器要求使用`POST`方式请求下载的话。
-      - username 如果服务器要求用户身份认证的用户名。
-      - password 和上者匹配的密钥。
-      - filepath 本地保存目录。（需要转义反斜杠，如`F:\\下载`）
-      - filename 重命名文件。（需要带上拓展名，如`视频.mp4`）
-   5. 这些数据一般真正常用的也就是“保存目录”和“重命名”了，直接以`名称: 内容`添加进.ef2文件的数据中即可。
 
-这是一个添加了自定义数据的ef2文件以纯文本打开的例子：
-```
+### 相关说明
+####  .ef2文件拓展
+ef2文件本质是一个纯文本文件，将其用记事本打开很容易发现其中的规律：
+<details>
+  <summary>文件示例</summary>
+  <pre>
 <
-http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfqXBvEuENvNC8aNEVEtEvE9IMvXBvE2ENvNCImNEVEIj0Y2J_aug859IB_&uipk=5&nbs=1&deadline=1614744363&gen=playurlv2&os=bcache&oi=3086813462&trid=380d8edeb31f490da4218197dfa3324du&platform=android_i&upsig=7fa0207c16000f70b55a21fa6918e2b3&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,platform&cdnid=6743&mid=49811844&orderid=0,3&logo=80000000
-referer: https://www.bilibili.com/
-User-Agent: Bilibili Freedoooooom/MarkII
+https://img2.example.com/data/1102/94/IMG_0001.jpg
+referer: https://img2.example.com/data/1102/94/
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
+>
+<
+https://img2.example.com/data/1102/94/IMG_0002.jpg
+referer: https://img2.example.com/data/1102/94/
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
+>
+<
+https://img2.example.com/data/1102/94/IMG_0003.jpg
+referer: https://img2.example.com/data/1102/94/
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
+>
+  </pre>
+  <details>
+  <summary>规律说明</summary>
+  <ul>
+    <li>一对英文尖括号中就是一条下载数据，有几对尖括号就有几条下载数据</li>
+    <li>尖括号中第一行就是下载URL，如果有URL之外的内容，换行填写在URL下面</li>
+    <li>URL之外的内容是以“内容名称” + “英文冒号” + “英文空格” + “内容数据”的格式</li>
+  </ul>
+  </details>
+  <details>
+  <summary>拓展内容</summary>
+  <ul>
+    <li>除了示例中的referer和User-Agent，本工具添加的内容如下<table border="1">
+    <tr>
+        <td>cookies</td>
+        <td>如果下载需要用到cookies</td>
+    </tr>
+    <tr>
+        <td>postdata</td>
+        <td>改用POST方式请求时要提交的数据</td>
+    </tr>
+    <tr>
+        <td>username/password</td>
+        <td>这两个搭配使用与HTTP认证<del>从来没用过的说</del></td>
+    </tr>
+    <tr>
+        <td>filepath</td>
+        <td>保存路径，双反斜杠形式如<pre>F:\\下载</pre></td>
+    </tr>
+    <tr>
+        <td>filename</td>
+        <td>文件名，包含拓展名如<pre>视频.mp4</pre></td>
+    </tr>
+</table></li>
+    <li>尖括号中第一行就是下载URL，如果有URL之外的内容，换行填写在URL下面</li>
+    <li>URL之外的内容是以“内容名称” + “英文冒号” + “英文空格” + “内容数据”的格式</li>
+  </ul>
+  </details>
+  <details>
+  <summary>拓展示例</summary>
+  <div>
+    <span>就在上文示例的中添加一个保存目录和文件名作为示例吧</span>
+    <pre>
+<
+https://img2.example.com/data/1102/94/IMG_0001.jpg
+referer: https://img2.example.com/data/1102/94/
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
 filepath: F:\\下载
 filename: 视频.mp4
 >
-```
+    </pre>
+  </div>
+  </details>
+  </details>
+</details>
 
-#### 2. 使用本工具自定义的`ef2`协议直接从浏览器中拉起IDM
-网页中的下载链接本质可能是一个`a`标签，如：
-```
-<a href="http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s" download="123.m4v">123.m4v</a>
-```
-简要解析一下其中的含义：
-   - 123.m4v 网页中真正显示的文字。
-   - href 下载URL，鼠标点击跳转去的链接。
-   - download 指示这是一个下载链接并重命名文件
+---
 
-现在我们改造一下`href`中的链接，变成鼠标单击能直接拉起本工具发送给IDM的样子。如果不需要配置其他自定义数据的，直接在`http`前面加上`ef2://`最简单。即`ef2://http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s`。  
-但这样简单处理意义并不大，为了能自定义更多数据，需要换一种处理方式，通用格式为`-类型 数据`
-   - `-u http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s` （URL）
-   - `-r https://www.bilibili.com/` (referer)
-   - `-a "Bilibili Freedoooooom/MarkII"` （User-Agent）
-   - `-c xxxxxxx` （cookies）
-   - `-d yyyyyyy` （postdata）
-   - `-U zzzzzzz` （username）
-   - `-P wwwwwww` （password）
-   - `-o F:\\下载` （保存目录）
-   - `-s 视频.mp4` （重命名）
-   - `-f` （禁用IDM下载对话框）
-   - `-q` （添加到IDM队列而不是立即下载）
-
-*注意数据中带空格的话请用双引号括起来，如上面的User-Agent*  
-*所有参数除了URL都可是按需添加且没有顺序，不过只有URL的话也用不着本工具，直接右键IDM下载就是。*  
-*保存目录由于用到了反斜杠所以务必注意转义问题*  
-*最后两个设置只有类型无需数据，并且最多选一个*  
-第一步：将需要的数据用空格连起来，如
- ```
- -u http://112.48.167.3/upgcxcode/64/98/304509864/304509864_nb2-1-30080.m4s -r https://www.bilibili.com/ -a "Bilibili Freedoooooom/MarkII" -o F:\\下载 -s 视频.mp4 -q
- ```
-*这个例子配置了URL、referer、User-Agent、保存目录、重命名并取消了立即下载*  
-第二步：将链起来的数据用Base64编码一下：
- ```
-LXUgaHR0cDovLzExMi40OC4xNjcuMy91cGdjeGNvZGUvNjQvOTgvMzA0NTA5ODY0LzMwNDUwOTg2NF9uYjItMS0zMDA4MC5tNHMgLXIgaHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tLyAtYSAiQmlsaWJpbGkgRnJlZWRvb29vb29tL01hcmtJSSIgLW8gRjpcXOS4i+i9vSAtcyDop4bpopEubXA0
- ```
-第三步：添加上`ef2://`头替换进`a`标签的`href`属性中
- ```
-<a href="ef2://LXUgaHR0cDovLzExMi40OC4xNjcuMy91cGdjeGNvZGUvNjQvOTgvMzA0NTA5ODY0LzMwNDUwOTg2NF9uYjItMS0zMDA4MC5tNHMgLXIgaHR0cHM6Ly93d3cuYmlsaWJpbGkuY29tLyAtYSAiQmlsaWJpbGkgRnJlZWRvb29vb29tL01hcmtJSSIgLW8gRjpcXOS4i+i9vSAtcyDop4bpopEubXA0" download="123.m4v">123.m4v</a>
- ```
-最后：用户点击该`a`标签即可拉起IDM，自定义的referer、User-Agent、保存目录和重命名一并传递给了IDM，并且直接添加到下载列表而不立即可开始下载(`-q`参数的效果)。    
-
-项目中的`ef2.js`文件是一个生成`ef2`协议的es6模块，可以通过es6载入模块命令载入，以`default`导出了一个`ef2`对象同时挂载到了`window`下。其中`ef2.encode()`方法接收一个对象并将其转化为`ef2`协议，如：
+#### ef2协议
+ef2协议是形如
 ```
-ef2.encode({
-   u: "http://www.example.com/example.mp4",
-   a: "Bilibili Freedoooooom/MarkII",
-   r: "http://www.example.com/",
-   o: "F:\\下载\\IDM",
-   s: "example.mp4",
-   q: true });
+ef2://LXUgaHR0cHM6Ly9jYW4uYml1Lm1vZS92MS80LzEyODQ/ZT0xNjE4OTc0MjMwJnRrPTM2MDMzYTA3MDA3MzU5MmJiMTYxMjBmOTc4ODljZjk5Jm1vZWhhc2g9MzcyMzQ3MCAtYSBHby1odHRwLWNsaWVudC8xLjEgLXMgIua4hea1puWkj+WunyAtIOaXheOBrumAlOS4rS5mbGFjIg==
 ```
-*`-f`和`-q`由于无数据所以务必传入“真值”，js中任意真值皆可。*  
-`ef2.dncode()`方法是`ef2.encode()`方法的反过程。  
-注意二者都返回`promise`，可以链式调用，也可以使用`await`关键词获取真正的返回值。
+的链接  
+该链接本质上是`ef2://`头 + 一串Base64字符串，您可以这样使用：
+   - 粘贴进浏览器地址栏并回车
+   - 写进a标签的href属性里点击该链接
+   - js中使用`window.open()`等方法直接打开该链接
+
+<details>
+   <summary>那么该如何生成这样的链接呢？</summary>
+   <div>
+     <span>生成分为三步</span>
+     <ol>
+      <li>把配置数据以一定格式排列成字符串</li>
+      <li>把组合成的字符串进行Base64编码</li>
+      <li>给生成的Base64编码添加上 ef2:// 头</li>
+     </ol>
+   <div>
+   <details>
+   <summary>所谓的一定格式是？</summary>
+   <ul>
+     <li>“减号” + “标记” + “英文空格” + “内容(如果存在空格等非法字符请用英文双引号括起来)” + “下一条数据”</li>
+     <li>可使用的标记如下，与配置数据内容一一对应<table border="1">
+    <tr>
+        <th>标记</th>
+        <th>内容</th>
+        <th>示例</th>
+    </tr>
+    <tr>
+      <td>u</td>
+      <td>URL</td>
+      <td><pre>-u https://img2.example.com/data/1102/94/IMG_0001.jpg</pre></td>
+    </tr>
+    <tr>
+      <td>r</td>
+      <td>referer</td>
+      <td><pre>-r https://img2.example.com/</pre></td>
+    </tr>
+    <tr>
+      <td>a</td>
+      <td>User-Agent</td>
+      <td><pre>-a Bilibili Freedoooooom/MarkII</pre></td>
+    </tr>
+    <tr>
+      <td>c</td>
+      <td>cookies</td>
+      <td>如果需要cookies<pre>-a cookies字符串</pre></td>
+    </tr>
+    <tr>
+      <td>d</td>
+      <td>postdata</td>
+      <td>如果改用POST方式提交的数据<pre>-d postdata字符串</pre></td>
+    </tr>
+    <tr>
+      <td>U</td>
+      <td>username</td>
+      <td>与password配对<del>从没用过的说</del><pre>-U username字符串</pre></td>
+    </tr>
+    <tr>
+      <td>P</td>
+      <td>password</td>
+      <td>与username配对<del>从没用过的说</del><pre>-P password字符串</pre></td>
+    </tr>
+    <tr>
+      <td>o</td>
+      <td>保存路径</td>
+      <td>注意反斜杠！<pre>-o F:\下载</pre></td>
+    </tr>
+    <tr>
+        <td>s</td>
+        <td>文件名</td>
+        <td>注意拓展名！<pre>-s 视频.mp4</pre></td>
+    </tr>
+    <tr>
+        <td>f</td>
+        <td>特殊标记</td>
+        <td>禁用IDM下载对话框，只有标记没有内容！<pre>-f</pre></td>
+    </tr>
+    <tr>
+        <td>q</td>
+        <td>特殊标记</td>
+        <td>添加到IDM队列而不是立即下载，只有标记没有内容！<pre>-q</pre></td>
+    </tr>
+</table></li>
+     <li>以方才拓展ef2文件的那条数据为例转成的格式是这样<pre>-u https://img2.example.com/data/1102/94/IMG_0001.jpg -r https://img2.example.com/data/1102/94/ -a "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko" -o F:\下载 -s 视频.mp4</pre></li>
+     <li>还可以添加上特殊标记“禁用IDM下载对话框”变成这样<pre>-u https://img2.example.com/data/1102/94/IMG_0001.jpg -r https://img2.example.com/data/1102/94/ -a "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko" -o F:\下载 -s 视频.mp4 -f</pre></li>
+   </ul>
+   </details>
+   <details>
+  <summary>如何在js中引入ef2.js模块生成ef2协议？</summary>
+  <ol>
+    <li>本仓库的`ef2.js`是一个标准的es6模块，你可以使用标准的es6模块载入方式载入进你的项目，比如<pre>import("//cdn.jsdelivr.net/gh/MotooriKashin/ef2/ef2.js") // 直接使用jsdelivr从本仓库载入模块</pre></li>
+    <li>载入成功后顶层window对象上将挂载一个ef2对象，该对象下的encode方法接受一个对象并以Promise形式返回ef2协议<pre>
+    // 仍用上文数据作为例子
+    window.ef2.encode({
+       u: "https://img2.example.com/data/1102/94/IMG_0001.jpg",
+       r: "https://img2.example.com/data/1102/94/",
+       a: "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko",
+       o: "F:\\下载", // js中反斜杠需要转义，所以也是双反斜杠
+       s: "视频.mp4",
+       f: true // 任意真值均可
+    }).then(d => {
+       // d 即为转化后的ef2协议链接，包括`ef2://`头
+    })
+    </pre></li>
+  </ol>
+  </details>
+</details>
 
 ---
 ### 编译相关
@@ -117,26 +220,29 @@ ef2.encode({
 > Windows 8  
 > VSCode 1.55.0  
 > C/C++ Extension 1.3.0  
-> MSVC 2015
+> MSVC 2019
 
-- 由于IDM是Windows平台的下载工具，而官方又以COM组件形式暴露的编程接口，所以项目从1.0版本起正式弃用`MinGW`而使用`vs2015`自带的`msvc`作为编译器，以获得最佳效果并取消对于第三方二进制文件的依赖。  
-- 编译平台仍使用`VSCode`，通过配置`launch.json`和`tasks.json`以命令行形式调用`cl.exe`、`rc.exe`以及`link.exe`编译并链接，所以需要自行配置`msvc`进环境变量。  
-- 调用COM组件不可避免调用了`ATL`和`Windows SDK`，请一并添加进环境变量`include`。这些包括上面的环境变量对于vs的不同版本有不同的目录，所以无法给出一个统一的配置样例。以下所举全为`vs2015`在`Windows8`上默认目录，其他Windows版本或VS版本请自行对照修改。  
-   + path：编译器`cl.exe`所在目录，`Windows Kits`资源编译器`rc.exe`所在目录。
-      - 例如：`C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64;C:\Program Files (x86)\Windows Kits\8.1\bin\x64`
-   + include：`VC++`库所在目录，`Windows Kits`中`um`、`shared`、`ucrt`以及`atlmfc`所在目录。
-      - 例如：`C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include;C:\Program Files (x86)\Windows Kits\8.1\Include\um;C:\Program Files (x86)\Windows Kits\8.1\Include\shared;C:\Program Files (x86)\Windows Kits\10\Include\10.0.10150.0\ucrt;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\atlmfc\include`
-   + lib：`VC++`lib库所在目录，`Windows Kits`中`ucrt`、`atlmfc`lib库所在目录，`Microsoft SDKs`lib库所在目录。
-      - 例如：`C:\Program Files (x86)\Windows Kits\10\Lib\10.0.10150.0\ucrt\x64;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\lib\amd64;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib\x64;C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\atlmfc\lib\amd64`  
-- 配置环境变量后可能出现编译调试正常但`VSCode`的C/C++拓展语法检查提示无法找不到某些源文件问题。请在`c_cpp_properties.json`（位于.vscode目录下，本人使用全局设定没有用该文件，如需要请自行创建——在VSCode打开cpp文件时点击右下角【win32】即可快速创建）中指定编译器为对应的`MSVC`并添加`include`。或者直接在`VSCode`的`settings.json`中添加如下项目：
-   + `C_Cpp.default.intelliSenseMode`：`windows-msvc-x64`，即`MSVC`的64位桌面程序
-   + `C_Cpp.default.compilerPath`：这里请精确到编译器`cl.exe`的绝对路径，如：`C:\\MSVC\\14.29.30130\\bin\\Hostx64\\x64\\cl.exe`
-   + `C_Cpp.default.includePath`：这是一个数组，数组中请填入`Windows SDK`中所有`include`目录，对于`MSVC 2019`应该包括：winrt、shared、um三项  
-- `ef2.cpp`是程序入口，打开该文件进行编译会在根目录生成`ef2.exe`，即是对外发布的二进制程序。  
-- 直接在`VSCode`中打开`ef2.cpp`文件可能报错`无法打开 源 文件 ".\IDManTypeInfo.tlh"`，这是因为缺少`tlb`库对应的解析文件，会在编译过程中自动生成。因为该文件包含设备本地环境数据不适合对外发布，所以将这些文件添加进了`.gitignore`，只需编译一次就会在本地生成，然后就不会报错了。  
-- 对外发布的`tasks.json`是release版本任务，如需调试请将`cl`任务的`args`参数替换成debug版本，在终端输入`cl.exe /?`有详细的配置说明。值得注意的是本项目编译和链接是分开的，因为要链接RC资源，所以请务必保留`/c`参数以禁用自动链接。  
-- 本地调试时如果`launch.json`中没有传入参数，将进入UI绘制部分，那部分申请了管理员权限以至于无法调试，需要的话请注释掉`ef2.cpp`中“管理员提权”那部分代码，以便进行调试，只是这样会导致注册表相关操作失败。
+1. 把`msvc`需要配置Windows环境变量
+   - path：编译器`cl.exe`所在目录，`Windows Kits`资源编译器`rc.exe`所在目录。
+   - include：`VC++`库所在目录，`Windows Kits`中`um`、`shared`、`ucrt`以及`atlmfc`所在目录。
+   - lib：`VC++`lib库所在目录，`Windows Kits`中`ucrt`、`atlmfc`lib库所在目录，`Microsoft SDKs`lib库所在目录。
+2. 调整`VSCode`设置以使用`MSVC`作为C/C++编译器
+   - `C_Cpp.default.intelliSenseMode` 推荐设为`windows-msvc-x64`
+   - `C_Cpp.default.compilerPath`     需要精确到`cl.exe`的绝对路径
+3. 克隆本项目到本地然后在`VSCode`中打开
+4. `idmantypeinfo.tlh`和`idmantypeinfo.tli`两个包含本地信息的项目文件会在第一次编译后自动生成
+5. 编译命令`launch.json`和`tasks.json`已配置好，编译任务分为4步
+   1. 编译RC资源
+   2. 编译代码文件而不链接
+   3. 链接生成二进制文件
+   4. 清理中间产物
+6. 编译任务使用的参数是release版，如需debug请自行调整任务2的参数，代码中管理员提权部分可能会影响debug可临时注释掉
 
+---
+### 开放源码
+本项目以 MIT 许可开放所有源代码，IDM提供的源码部分请参考[Internet Download Manager COM based Application Programming Interface (API)](http://www.internetdownloadmanager.com/support/idm_api.html)。
+
+---
 ### 参考致谢
 - [unamer](https://github.com/unamer/IDMHelper)：IDM的编程接口使用示例，本项目1.0之前直接使用该项目提供的二进制文件负责拉起IDM。
 - [臭咸鱼](https://www.cnblogs.com/chouxianyu/p/11249810.html)：vscode编译c++中文乱码问题。
