@@ -14,10 +14,6 @@
 			"problemMatcher": [
 				"$msCompile"
 			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
 			"detail": "编译RC资源。"
 		},
 		{
@@ -47,10 +43,6 @@
 			"problemMatcher": [
 				"$msCompile"
 			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
 			"detail": "编译代码文件而不链接。",
 			"dependsOn": [
 				"rc"
@@ -70,10 +62,6 @@
 			"problemMatcher": [
 				"$msCompile"
 			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
 			"detail": "链接生成二进制文件",
 			"dependsOn": [
 				"cl"
@@ -124,7 +112,11 @@
 			"dependsOn": [
 				"clean"
 			],
-			"detail": "编译入口，依次编译资源、代码，进行链接，并清理中间文件"
+			"detail": "编译入口，依次编译资源、代码，进行链接，并清理中间文件",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
 		}
 	]
 }
