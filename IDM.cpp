@@ -68,12 +68,10 @@ int CALLBACK SendLinkToIDM(std::string str) {
         if (!strcmp(argv[i].c_str(), "-f"))
         {
             f |= 1;
-            i++;
         }
         if (!strcmp(argv[i].c_str(), "-q"))
         {
             f |= 2;
-            i++;
         }
     }
     if (!u) {

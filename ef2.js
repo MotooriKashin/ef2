@@ -84,11 +84,11 @@ class Ef2 {
 
                         break;
                     case "U":
-                        this.data = this.data + "-u " + obj[key] + " "; // 账户名称（服务器鉴权——基本不可能用到）
+                        this.data = this.data + "-U " + obj[key] + " "; // 账户名称（服务器鉴权——基本不可能用到）
 
                         break;
                     case "P":
-                        this.data = this.data + "-p " + obj[key] + " "; // 账户密钥（服务器鉴权——基本不可能用到）
+                        this.data = this.data + "-P " + obj[key] + " "; // 账户密钥（服务器鉴权——基本不可能用到）
 
                         break;
                     case "o":

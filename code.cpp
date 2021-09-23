@@ -4,7 +4,7 @@
 string Utf8ToGbk(const char*);
 string GbkToUtf8(const char*);
 void ef2Protocol(string);
-void ef2Protocol(string);
+void ef2File(string);
 
 // Utf8 -> Gbk
 string Utf8ToGbk(const char* src_str)
