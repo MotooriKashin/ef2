@@ -6,10 +6,10 @@
 			"label": "rc",
 			"command": "rc.exe",
 			"args": [
-				"${workspaceFolder}\\resource.rc"
+				"${workspaceFolder}\\src\\resource.rc"
 			],
 			"options": {
-				"cwd": "${workspaceFolder}"
+				"cwd": "${workspaceFolder}\\src"
 			},
 			"problemMatcher": [
 				"$msCompile"
@@ -34,11 +34,11 @@
 				"/D",
 				"UNICODE",
 				"/Fe:",
-				"${workspaceFolder}\\ef2.obj",
-				"${workspaceFolder}\\ef2.cpp"
+				"${workspaceFolder}\\src\\ef2.obj",
+				"${workspaceFolder}\\src\\ef2.cpp"
 			],
 			"options": {
-				"cwd": "${workspaceFolder}"
+				"cwd": "${workspaceFolder}\\src"
 			},
 			"problemMatcher": [
 				"$msCompile"
@@ -53,11 +53,11 @@
 			"label": "link",
 			"command": "link.exe",
 			"args": [
-				"${workspaceFolder}\\ef2.obj",
-				"${workspaceFolder}\\resource.res"
+				"${workspaceFolder}\\src\\ef2.obj",
+				"${workspaceFolder}\\src\\resource.res"
 			],
 			"options": {
-				"cwd": "${workspaceFolder}"
+				"cwd": "${workspaceFolder}\\src"
 			},
 			"problemMatcher": [
 				"$msCompile"
@@ -68,41 +68,19 @@
 			]
 		},
 		{
-			"type": "process",
-			"label": "clean",
-			"command": "powershell.exe",
+			"type": "shell",
+			"command": "Remove-Item",
 			"args": [
-				"ls",
-				"$folder",
-				"-r",
-				"|",
-				"%",
-				"{",
-				"if($_.name",
-				"-match",
-				"\"obj$\"",
-				"-or",
-				"$_.name",
-				"-match",
-				"\"pdb$\"",
-				"-or",
-				"$_.name",
-				"-match",
-				"\"exe.manifest$\"",
-				"-or",
-				"$_.name",
-				"-match",
-				"\"res$\"",
-				"-and",
-				"$_.mode",
-				"-notmatch",
-				"\"d\"){",
-				"del",
-				"$_.FullName",
-				"}",
-				"}"
+				"${workspaceFolder}\\src\\*",
+				"-Include",
+				"*.obj,",
+				"*.pdb,",
+				"*.exe.manifest,",
+				"*.res"
 			],
-			"detail": "清理中间文件残留，使用powershell",
+			"detail": "清理临时文件",
+			"label": "clean",
+			"problemMatcher": [],
 			"dependsOn": [
 				"link"
 			]
@@ -117,6 +95,15 @@
 				"kind": "build",
 				"isDefault": true
 			},
+		},
+		{
+			"type": "typescript",
+			"tsconfig": "typescript/tsconfig.json",
+			"problemMatcher": [
+				"$tsc"
+			],
+			"detail": "编译ts模块",
+			"label": "tsc"
 		}
 	]
 }

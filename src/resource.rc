@@ -5,15 +5,15 @@ IDI_MYICON ICON "IDI_MYICON.ico"
 1 24 "ef2.manifest"
 
 1 VERSIONINFO
-FILEVERSION     1,0,0,0
-PRODUCTVERSION  1,0,0,0
+FILEVERSION     1,0,1,0
+PRODUCTVERSION  1,0,1,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
     BLOCK "080404E4"
     BEGIN
       VALUE "CompanyName", "Motoori Kashin"
-      VALUE "FileDescription", "IDM EF2解析工具"
+      VALUE "FileDescription", "IDM EF2辅助工具"
       VALUE "FileVersion", "1.0"
       VALUE "InternalName", "ef2.exe"
       VALUE "LegalCopyright", "Licensed under the MIT License."
