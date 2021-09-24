@@ -197,7 +197,7 @@ ef2://LXUgaHR0cHM6Ly9jYW4uYml1Lm1vZS92MS80LzEyODQ/ZT0xNjE4OTc0MjMwJnRrPTM2MDMzYT
   <summary>如何在js中引入ef2.js模块生成ef2协议？</summary>
   <ol>
     <li>本仓库的`ef2.js`是一个标准的es6模块，你可以使用标准的es6模块载入方式载入进你的项目，比如<pre>import("//cdn.jsdelivr.net/gh/MotooriKashin/ef2/ef2.js") // 直接使用jsdelivr从本仓库载入模块</pre></li>
-    <li>载入成功后顶层window对象上将挂载一个ef2对象，该对象下的encode方法接受一个对象并以Promise形式返回ef2协议<pre>
+    <li>载入成功后顶层window对象上将挂载一个ef2对象，该对象下的encode方法接受一个对象并返回ef2协议<pre>
     // 仍用上文数据作为例子
     window.ef2.encode({
        u: "https://img2.example.com/data/1102/94/IMG_0001.jpg",
@@ -206,9 +206,9 @@ ef2://LXUgaHR0cHM6Ly9jYW4uYml1Lm1vZS92MS80LzEyODQ/ZT0xNjE4OTc0MjMwJnRrPTM2MDMzYT
        o: "F:\\下载", // js中反斜杠需要转义，所以也是双反斜杠
        s: "视频.mp4",
        f: true // 任意真值均可
-    }).then(d => {
-       // d 即为转化后的ef2协议链接，包括`ef2://`头
     })
+
+    // d 即为转化后的ef2协议链接，包括`ef2://`头
     </pre></li>
   </ol>
   </details>
