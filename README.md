@@ -84,7 +84,7 @@ User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
 如此一来在浏览器中点击该链接便可以拉起IDM。但我们还需拓展一下，以让这种协议不仅能传递下载链接，还要能传递referer、User-Agent等关键词以支持ef2文件类似的功能。  
 于是我们将协议内容部分由单纯的网址转变为**命令行参数**形式（为方便演示暂时未使用Base64编码）
 >
-> www.example.com ----参数化----> -u www.example.com
+> `www.example.com ----参数化----> -u www.example.com`
 >
 
 <details>
@@ -203,3 +203,4 @@ User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
 | [mingw控制台中文乱码](https://www.cnblogs.com/chouxianyu/p/11249810.html) | 未知 |
 | [C++实现utf8和gbk编码字符串互相转换](https://blog.csdn.net/u012234115/article/details/83186386) | 未知 |
 | [base64](https://github.com/tkislan/base64) | [MIT License](https://github.com/tkislan/base64/blob/master/LICENSE) |
+| [HeadSocket](https://github.com/garbageslam/HeadSocket) | 未知 |
