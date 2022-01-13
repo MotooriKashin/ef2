@@ -5,8 +5,8 @@ IDI_MYICON ICON "IDI_MYICON.ico"
 1 24 "ef2.manifest"
 
 1 VERSIONINFO
-FILEVERSION     1,0,1,0
-PRODUCTVERSION  1,0,1,0
+FILEVERSION     1,0,2,0
+PRODUCTVERSION  1,0,2,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
@@ -14,12 +14,12 @@ BEGIN
     BEGIN
       VALUE "CompanyName", "Motoori Kashin"
       VALUE "FileDescription", "IDM EF2¸¨Öú¹¤¾ß"
-      VALUE "FileVersion", "1.0"
+      VALUE "FileVersion", "1.0.2"
       VALUE "InternalName", "ef2.exe"
       VALUE "LegalCopyright", "Licensed under the MIT License."
       VALUE "OriginalFilename", "ef2.exe"
       VALUE "ProductName", "IDM EF2 Helper"
-      VALUE "ProductVersion", "1.0"
+      VALUE "ProductVersion", "1.0.2"
     END
   END
   BLOCK "VarFileInfo"

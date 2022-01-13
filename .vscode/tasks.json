@@ -17,93 +17,68 @@
 			"detail": "编译RC资源。"
 		},
 		{
-			"type": "shell",
-			"label": "cl",
+			"type": "cppbuild",
+			"label": "C/C++: cl.exe debug",
 			"command": "cl.exe",
 			"args": [
-				"/c",
-				"/GF",
-				"/O2",
+				"/Zi",
 				"/EHsc",
-				"/D",
-				"NDEBUG",
-				"/D",
-				"_WINDOWS",
-				"/D",
-				"_UNICODE",
-				"/D",
-				"UNICODE",
+				"/nologo",
 				"/Fe:",
-				"${workspaceFolder}\\src\\ef2.obj",
-				"${workspaceFolder}\\src\\ef2.cpp"
+				"${workspaceFolder}\\ef2.exe",
+				"${file}",
+				"${workspaceFolder}\\src\\resource.res"
 			],
 			"options": {
-				"cwd": "${workspaceFolder}\\src"
+				"cwd": "${fileDirname}"
 			},
 			"problemMatcher": [
 				"$msCompile"
 			],
-			"detail": "编译代码文件而不链接。",
+			"detail": "调试: cl.exe",
 			"dependsOn": [
 				"rc"
 			]
 		},
 		{
-			"type": "shell",
-			"label": "link",
-			"command": "link.exe",
+			"type": "cppbuild",
+			"label": "C/C++: cl.exe build",
+			"command": "cl.exe",
 			"args": [
-				"${workspaceFolder}\\src\\ef2.obj",
+				"/GF",
+				"/O2",
+				"/EHsc",
+				"/D",
+				"NDEBUG",
+				"/Fe:",
+				"${workspaceFolder}\\ef2.exe",
+				"${file}",
 				"${workspaceFolder}\\src\\resource.res"
 			],
 			"options": {
-				"cwd": "${workspaceFolder}\\src"
+				"cwd": "${fileDirname}"
 			},
 			"problemMatcher": [
 				"$msCompile"
 			],
-			"detail": "链接生成二进制文件",
-			"dependsOn": [
-				"cl"
-			]
-		},
-		{
-			"type": "shell",
-			"command": "Remove-Item",
-			"args": [
-				"${workspaceFolder}\\src\\*",
-				"-Include",
-				"*.obj,",
-				"*.pdb,",
-				"*.exe.manifest,",
-				"*.res"
-			],
-			"detail": "清理临时文件",
-			"label": "clean",
-			"problemMatcher": [],
-			"dependsOn": [
-				"link"
-			]
-		},
-		{
-			"label": "Build",
-			"dependsOn": [
-				"clean"
-			],
-			"detail": "编译入口，依次编译资源、代码，进行链接，并清理中间文件",
 			"group": {
 				"kind": "build",
 				"isDefault": true
 			},
+			"detail": "编译器: cl.exe",
+			"dependsOn": [
+				"rc"
+			]
 		},
 		{
 			"type": "typescript",
+			"detail": "编译配套js模块",
 			"tsconfig": "typescript/tsconfig.json",
 			"problemMatcher": [
 				"$tsc"
 			],
-			"detail": "编译ts模块",
-			"label": "tsc"
+			"group": "build",
+			"label": "tsc: build - typescript/tsconfig.json"
 		}
 	]
 }

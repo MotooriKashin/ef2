@@ -5,15 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "调试",
+            "name": "cl.exe - debug",
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}\\ef2.exe",
-            "args": [],
+            "args": [
+                "ef2://websocket:9186"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "preLaunchTask": "Build"
+            "console": "externalTerminal",
+            "preLaunchTask": "C/C++: cl.exe debug"
         }
     ]
 }
