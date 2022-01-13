@@ -126,9 +126,10 @@ declare class Ef2 {
     sendLinkToIDM(data: EF2Data): void;
     /**
      * 启动nativeMessaging模式并建立连接
+     * @param port websocket端口号
      * @returns nativeMessaging模式提供的方法
      */
-    nativeMessaging(): Promise<MsgHost>;
+    nativeMessaging(port?: number): Promise<MsgHost>;
 }
 declare const _default: Ef2;
 export default _default;

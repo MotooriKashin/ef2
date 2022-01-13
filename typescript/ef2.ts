@@ -30,9 +30,6 @@ class NativeMessaging {
                 console.error(e);
                 reject(e);
             }, { once: true });
-            socket.addEventListener("message", e => {
-                console.log("<<", e.data);
-            })
         });
     }
     static awaken(port: number) {
@@ -157,7 +154,6 @@ class MsgHost {
     }
     static send(msg: string = "") {
         msg = `"${msg}"`;
-        console.log(">>", msg);
         this.ws.send(`"${msg}"`);
     }
     /**

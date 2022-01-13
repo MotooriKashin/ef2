@@ -55,16 +55,16 @@ class NativeMessaging {
         });
     }
 }
-class M4SDASH {
-    dash = {
-        videoDetails: { title: "" },
-        streamingData: {
-            adaptiveFormats: [],
-            expiresInSeconds: "21540",
-            formats: []
-        }
-    };
-}
+// class M4SDASH {
+//     dash: Partial<DASH> = {
+//         videoDetails: { title: "" },
+//         streamingData: {
+//             adaptiveFormats: [],
+//             expiresInSeconds: "21540",
+//             formats: []
+//         }
+//     }
+// }
 class MsgHost {
     /**
      * 浏览器窗口序号
@@ -458,11 +458,26 @@ class Ef2 {
     }
     /**
      * 启动nativeMessaging模式并建立连接
+     * @param port websocket端口号
      * @returns nativeMessaging模式提供的方法
      */
-    async nativeMessaging() {
-        const ws = await new NativeMessaging(12345).init();
+    async nativeMessaging(port = 9186) {
+        const ws = await new NativeMessaging(port).init();
         return new MsgHost(ws);
     }
 }
 export default new Ef2();
+// interface M4S {
+//     video: {
+//         url: string,
+//         quality: string,
+//         mimeType: string,
+//         bitrate: number
+//     };
+//     audio: {
+//         url: string,
+//         mimeType: string,
+//         bitrate: number
+//     },
+//     title: string
+// }
