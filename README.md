@@ -181,13 +181,13 @@ User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
 ### 编译相关
 | 环境 | 版本 |
 | --- | --- |
-| Windows 8 | 6.2.9200.16442 |
+| Windows 11 | 10.0.22000.1 |
 | VSCode | 1.63.2 |
-| MSVC | 19.29.30130.2 |
-| Windows SDK | 10.0.19041.0 |
+| MSVC | 19.30.30709 |
+| Windows SDK | 10.0.22000.0 |
 
 说明：
-1. 需要添加MSVC和Windows SDK到环境变量，以在VSCode编译及调试。
+1. 需要在Developer Command Prompt for VS中启动VSCode，或者手动将MSVC及Windows SDK添加进系统环境变量。
 2. 打开main.cpp文件然后f5启用调试，获取运行任务`C/C++: cl.exe build`直接编译发行版。
 3. 任务`tsc: build - typescript/tsconfig.json`用来编译ef2.ts到js文件，输出目录为dist。
 
