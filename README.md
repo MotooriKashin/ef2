@@ -195,7 +195,7 @@ User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
 ### 开源许可
 [MIT License](https://opensource.org/licenses/MIT)
 
-项目中参考其他源码以文章：
+项目中参考其他源码及文章：
 | 项目或文章 | 开源协议 |
 | ------- | ------- |
 | [idm_api](http://www.internetdownloadmanager.com/support/idm_api.html) | 未知 |
