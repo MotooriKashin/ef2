@@ -41,7 +41,7 @@
 			]
 		},
 		{
-			"type": "cppbuild",
+			"type": "shell",
 			"label": "C/C++: cl.exe build",
 			"command": "cl.exe",
 			"args": [
