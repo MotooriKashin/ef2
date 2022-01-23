@@ -88,7 +88,7 @@ User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
 >
 
 <details>
-  <summary>查看完整参数说明</summary>
+  <summary>查看完整参数说明(*含空格等非法字符时请用双引号包裹*)</summary>
 <table border="1">
     <tr>
         <th>参数标记</th>
@@ -108,7 +108,7 @@ User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
     <tr>
       <td>a</td>
       <td>User-Agent</td>
-      <td><pre>-a Bilibili Freedoooooom/MarkII</pre></td>
+      <td><pre>-a "Bilibili Freedoooooom/MarkII"</pre></td>
     </tr>
     <tr>
       <td>c</td>
@@ -154,13 +154,13 @@ User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
 </details>
 
 注意别忘了用Base64编码一下然后添加上ef2协议头。  
-这种ef2协议使用方式基本类似http、ftp等协议，可以直接在浏览器地址栏中输入、添加a标签等href属性并点击、`window.open()`等方法打开，当然也可以直接作为命令行参数传递给ef2.exe，Base64编码千万别忘记。  
+这种ef2协议使用方式基本类似http、ftp等协议，可以直接在浏览器地址栏中输入、添加a标签等href属性并点击、`window.open()`等方法打开，当然也可以直接作为命令行参数传递给ef2.exe（Base64编码千万别忘记）。  
 **第一次使用本方法浏览器会弹出打开外部程序请求弹窗，需要点击允许，建议勾选不再提示。**
 
 #### ※ webSocket
 本工具还支持在后台运行，通过websocket协议接受下载数据并传递给IDM。  
 1. 命令行启动ef2.exe同时传递参数`ef2://websocket:${端口号}`，如`ef2://websocket:12345`。（**不需要Base64加密！**）
-2. 使用websocket客户端连接`ws:\\ws://localhost:${端口号}`，如`ws://localhost:12345`。
+2. 使用websocket客户端连接`ws://localhost:${端口号}`，如`ws://localhost:12345`。
 3. 使用websocket.send方法发起下载数据，格式可以是ef2协议（需要Base64编码）字符串。
 4. 使用websocket.close关闭websocket连接。
 5. 如果要退出后台运行，请在websocket.close前使用websocket.send方法发送字符串`fin`。
@@ -188,7 +188,7 @@ User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
 
 说明：
 1. 需要在Developer Command Prompt for VS中启动VSCode，或者手动将MSVC及Windows SDK添加进系统环境变量。
-2. 打开main.cpp文件然后f5启用调试，获取运行任务`C/C++: cl.exe build`直接编译发行版。
+2. 打开main.cpp文件然后f5启用调试，或者运行任务`C/C++: cl.exe build`直接编译发行版。
 3. 任务`tsc: build - typescript/tsconfig.json`用来编译ef2.ts到js文件，输出目录为dist。
 
 ---
