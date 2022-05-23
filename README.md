@@ -74,7 +74,7 @@ User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
 
 ---
 #### ※ ef2协议
-为了方便从浏览器中拉起IDM，本工具自定义了一种名为ef2的协议，能想使用http协议一样使用，格式如下：  
+为了方便从浏览器中拉起IDM，本工具自定义了一种名为ef2的协议，能像使用http协议一样使用，格式如下：  
 | 协议头 | 内容 | 完整形式 |
 | ----- | ----- | ----- |
 | ef2:// | d3d3LmV4YW1wbGUuY29t | ef2://d3d3LmV4YW1wbGUuY29t |
@@ -113,7 +113,7 @@ User-Agent: Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko
     <tr>
       <td>c</td>
       <td>cookies</td>
-      <td><pre>-a cookies字符串</pre></td>
+      <td><pre>-c cookies字符串</pre></td>
     </tr>
     <tr>
       <td>d</td>
