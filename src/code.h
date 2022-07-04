@@ -96,6 +96,7 @@ public:
         inFile.open(path.c_str());
         std::string temp;
         std::string result = "";
+        std::string fin = "";
         int one = 0;
         if (inFile)
         {
@@ -107,9 +108,10 @@ public:
                     one = one + 1; // 记录ef2文件中下载链接数目
                     if (result != "")
                     {
+                        fin = Utf8ToGbk(result.c_str());
                         /* ef2文件中不止一条链接，以添加队列方式发送前一条链接给IDM（需要手动开始下载队列） */
-                        result.append("-q");
-                        SendLinkToIDM(result);
+                        fin.append("-q");
+                        SendLinkToIDM(fin);
                     }
                     result = "";
                     getline(inFile, temp);
@@ -173,10 +175,11 @@ public:
                     }
                 }
             }
+            fin = Utf8ToGbk(result.c_str());
             if (one == 1)
             {
                 /* ef2文件中只有一条链接直接发送给IDM */
-                SendLinkToIDM(result);
+                SendLinkToIDM(fin);
             }
             else if (one == 0)
             {
@@ -185,8 +188,8 @@ public:
             else
             {
                 /* ef2文件中不止一条链接，以添加队列方式发送最后一条链接给IDM（需要手动开始下载队列） */
-                result.append("-q");
-                SendLinkToIDM(result);
+                fin.append("-q");
+                SendLinkToIDM(fin);
                 MessageBox(NULL, TEXT("该ef2文件包含复数个下载链接，为避免弹出过多对话框，已全部添加IDM到下载队列，请自行到IDM里开始队列！"), TEXT("ef2解析"), MB_ICONWARNING);
             }
             inFile.close();
